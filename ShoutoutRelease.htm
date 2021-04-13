@@ -119,6 +119,7 @@
     var clientAuth;
     var soChannel;
     var soID;
+    var boardstr = "<YourTwitchChannel>"		    
 
     container.style.visibility = 'hidden';
     var oAuth = new XMLHttpRequest();
@@ -348,7 +349,7 @@
 	//	}
       
 
-      ComfyJS.Init( "OELSHAMI" );//, "oauth:" );
+      ComfyJS.Init( boardstr );//, "oauth:" );
      
       function playVid(url) {
         isVideoPlaying = true;
