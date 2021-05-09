@@ -181,7 +181,7 @@
           var oReq = new XMLHttpRequest();
 			
             oReq.addEventListener("load", reqListener);
-			oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID)
+			oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+'&first=100')
 			oReq.setRequestHeader('client-id', clientid);
 			oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
 			//oReq.responseType = 'json';
