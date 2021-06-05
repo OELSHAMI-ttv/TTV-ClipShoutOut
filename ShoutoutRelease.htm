@@ -1,7 +1,6 @@
-
-
 <html>
   <head>
+    <script src="config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/comfy.js/dist/comfy.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet'>
   </head>
@@ -86,7 +85,7 @@
 		color: #5e199e;
 	}
   </style>
-  <body><div id="slugInfo"></div><div id="check">Bark Lord Certified <span id="streamer">streamer</span></div><div id="player">
+  <body><div id="slugInfo"></div><div id="check"></div><div id="player">
     <video id="video" width="100%" height="100%" autoplay >
       <source src="" type="video/mp4">
       Your browser does not support the video tag.
@@ -97,6 +96,7 @@
     var video = document.getElementById('video');
     var container = document.getElementById('video');
     var check = document.getElementById('check');
+    check.innerHTML = shoutoutConfig.title + ' <span id="streamer">streamer</span>';
     var slogInfo = document.getElementById('slugInfo');
     var slogInfoTwo = document.getElementById('slugInfoTwo');
     var streamer = document.getElementById('streamer');
@@ -113,13 +113,10 @@
     var mp4Res;
   	var listenBotSo = true;
     var listenBotSlug = true;
-    var clientid = 'Replace with your TwitchAppID from the Dev Twitch' //AppID from Dev Console
-    var clientSec = 'Replace with your Twitch App Secert here' //App Secert from Dev Console
     var ClientAuthURL;
     var clientAuth;
     var soChannel;
-    var soID;
-    var boardstr = "<YourTwitchChannel>"		    
+    var soID;		    
 
     container.style.visibility = 'hidden';
     var oAuth = new XMLHttpRequest();
@@ -130,7 +127,7 @@
         }
       };
     
-   	oAuth.open("POST",'https://id.twitch.tv/oauth2/token?client_id='+clientid+'&client_secret='+clientSec+'&grant_type=client_credentials');
+   	oAuth.open("POST",'https://id.twitch.tv/oauth2/token?client_id='+globalConfig.clientid+'&client_secret='+globalConfig.clientSec+'&grant_type=client_credentials');
     oAuth.send();
    
     ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
@@ -138,7 +135,6 @@
 
       if( flags.broadcaster && command == "bl" || flags.mod && command == "bl" || flags.broadcaster && command == "so" || flags.mod && command == "so"  ) {
         console.log("So Command Triggered");
-        //console.log(message)
         
         soChannel = message.replace("@", "");
 
@@ -151,7 +147,7 @@
         }
       };
       oUser.open("GET","https://api.twitch.tv/helix/users?login="+soChannel, false);
-      oUser.setRequestHeader('client-id', clientid);
+      oUser.setRequestHeader('client-id', globalConfig.clientid);
 			oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
       oUser.send();
       console.log(oUser);
@@ -162,7 +158,6 @@
       if(listenBotSo) {
             function reqListener () {
               mp4Res = JSON.parse(this.responseText);              
-              //mp4Res = this.responseText;
               var RanClip = Math.floor(Math.random() * mp4Res.data.length);
               mp4Res = mp4Res.data[RanClip].thumbnail_url
               let submp4 = mp4Res.split('-preview');
@@ -182,9 +177,8 @@
 			
             oReq.addEventListener("load", reqListener);
 			oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
-			oReq.setRequestHeader('client-id', clientid);
+			oReq.setRequestHeader('client-id', globalConfig.clientid);
 			oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
-			//oReq.responseType = 'json';
        oReq.send();
 			console.log(oReq);	
 		  
@@ -341,21 +335,15 @@
         }
 		
         }
-		
-     // ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
-	//	if( command === "test" ) {
-	//		//ComfyJS.Say( "replying to !test" );
-	//		}
-	//	}
       
 
-      ComfyJS.Init( boardstr );//, "oauth:" );
+      ComfyJS.Init( globalConfig.channelName );
      
       function playVid(url) {
         isVideoPlaying = true;
         if(commandType[0] === "clip") {
             container.style.visibility = 'visible';
-            check.style.visibility = 'visible';
+            shoutoutConfig.showTitle ? check.style.visibility = 'visible' : check.style.visibility = 'hidden';
             names[0] = names[0].replace("@", "");
             streamer.innerHTML = names[0];
             console.log("Playing Clip")

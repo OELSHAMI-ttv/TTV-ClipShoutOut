@@ -1,5 +1,6 @@
 <html>
   <head>
+    <script src="config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/comfy.js/dist/comfy.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet'>
   </head>
@@ -113,13 +114,10 @@
     var mp4Res;
   	var listenBotSo = true;
     var listenBotSlug = true;
-    var clientid = '' //AppID from Dev Console
-    var clientSec = '' //App Secert from Dev Console
     var ClientAuthURL;
     var clientAuth;
     var soChannel;
     var soID = 0;
-    var boardstr = "";
     var boardID;
     var RanClip = 0;
     var Repeat = 2; //Set to 0 if you want this to autostart without a command.
@@ -140,7 +138,7 @@
         getSOID(); 
         }
      };
-   	oAuth.open("POST",'https://id.twitch.tv/oauth2/token?client_id='+clientid+'&client_secret='+clientSec+'&grant_type=client_credentials');
+   	oAuth.open("POST",'https://id.twitch.tv/oauth2/token?client_id='+globalConfig.clientid+'&client_secret='+globalConfig.clientSec+'&grant_type=client_credentials');
     oAuth.send();
    
     ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
@@ -174,7 +172,7 @@
     };
 
 
-      ComfyJS.Init( boardstr );//, "oauth:" );
+      ComfyJS.Init( globalConfig.channelName );
       
       function getSOID() {
         var oUser = new XMLHttpRequest();
@@ -186,8 +184,8 @@
             console.log(soID);
           }
         };
-        oUser.open("GET","https://api.twitch.tv/helix/users?login="+boardstr);
-        oUser.setRequestHeader('client-id', clientid);
+        oUser.open("GET","https://api.twitch.tv/helix/users?login="+globalConfig.channelName);
+        oUser.setRequestHeader('client-id', globalConfig.clientid);
 		    oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
         oUser.send();
         console.log(oUser);      
@@ -196,9 +194,6 @@
       function barklord(){             
         function reqListener () {
                 mp4Res = JSON.parse(this.responseText);              
-                //console(mp4Res.data);
-                //mp4Res = this.responseText;
-                //var RanClip = Math.floor(Math.random() * mp4Res.data.length);
                 console.log(mp4Res.data.length);
                 if(mp4Res.data.length > 5) 
                 {
@@ -217,11 +212,10 @@
                     console.log("No Clips Found");
                   }                
         }
-        //console.log(message);
         var oReq = new XMLHttpRequest();
         oReq.addEventListener("load", reqListener);
         oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+'&first=100')
-        oReq.setRequestHeader('client-id', clientid);
+        oReq.setRequestHeader('client-id', globalConfig.clientid);
         oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);        
         oReq.send();
         console.log(oReq);	        
@@ -229,14 +223,10 @@
 
   function playVid(url) {
         isVideoPlaying = true;
-        //if(commandType[0] === "clip") {
-            container.style.visibility = 'visible';
-            check.style.visibility = 'visible';
-            names[0] = names[0].replace("@", "");
-            //streamer.innerHTML = names[0];
-            console.log("Playing Clip")
-        //  }
-		  
+        container.style.visibility = 'visible';
+        check.style.visibility = 'visible';
+        names[0] = names[0].replace("@", "");
+        console.log("Playing Clip")
         video.setAttribute('src', url);
 	      video.muted = false;        
         video.play();
@@ -267,19 +257,14 @@
 		    video.muted = true;
         video.currentTime = 0;
 		    video.src = "";
-        //container.style.visibility = 'hidden';
-        //check.style.visibility = 'hidden';
-        //slugInfo.style.visibility = 'hidden';
         slugInfoTwo.style.visibility = 'hidden';
         console.log(RanClip);
         var kill = RanClip;
         console.log(kill)
         clips.splice(kill,1);
         names = names.slice(1);
-        //commandType = commandType.slice(1);
         console.log("Clip Ended!");
         isVideoPlaying = false;
-        //RanClip = 0;
     }
 
      setInterval(function(){ 
