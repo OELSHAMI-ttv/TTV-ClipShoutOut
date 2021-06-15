@@ -1,0 +1,288 @@
+<html>
+  <head>
+    <script src="shoutoutconfig.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/comfy.js/dist/comfy.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet'>
+  </head>
+  <style>
+    body {
+      margin:0px;
+    }
+    #check {
+      font-family: 'Bangers';
+      font-size: 3em;
+      word-wrap: none;
+      visibility: hidden;
+      top:0px;
+      position:absolute;
+      z-index: 10;
+      text-align: center;
+      width:100%;
+      -webkit-text-stroke: 1px black;
+        color: white;
+        text-shadow:
+        3px 3px 0 #000,
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+        
+    }
+    #slugInfo {
+      font-family: 'Bangers';
+      font-size: 3em;
+      word-wrap: none;
+     
+      top:0px;
+      position:absolute;
+      z-index: 10;
+      text-align: center;
+      width:100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 700px;
+      -webkit-text-stroke: 1px rgba(0, 0, 0, 0);
+        color: white;
+        text-shadow:
+        3px 3px 0 #000,
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+    }
+    #slugInfoTwo {
+      font-family: 'Bangers';
+      font-size: 3em;
+      word-wrap: none;
+      visibility: hidden;
+      bottom:0px;
+      position:absolute;
+      z-index: 10;
+      text-align: center;
+      width:100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 700px;
+      -webkit-text-stroke: 1px rgba(0, 0, 0, 0);
+        color: white;
+        text-shadow:
+        3px 3px 0 #000,
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+    }
+
+    #video {
+      visibility: hidden;
+      width:100%;
+      height:100%;
+      top:0px;
+      position: absolute;
+    }
+	#streamerName {
+		color: #5e199e;
+	}
+  </style>
+  <body><div id="slugInfo"></div>
+    <div id="check">Be Right Back!</div>
+    <div id="player">
+    <video id="video" style="background-color: rgba(42, 179, 94, 0);" width="100%" height="100%" autoplay >
+      <source src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video><div id="slugInfoTwo" style="color: rgba(216, 43, 43, 0); background-color:rgba(214, 44, 44, 0);"></div>
+    <script type="text/javascript">
+    
+    var video = document.getElementById('video');
+    var container = document.getElementById('video');
+    var check = document.getElementById('check');
+    var slogInfo = document.getElementById('slugInfo');
+    var slogInfoTwo = document.getElementById('slugInfoTwo');
+    var streamer = document.getElementById('streamer');
+    var clips = [];
+    var names = [];
+    var slugClip;
+    var slugId = [];
+    var slugViewCount = [];
+    var slugCreator = [];
+    var slugDate = [];
+    var slugTitle = [];
+    var commandType = [];
+    var isVideoPlaying;
+    var mp4Res;
+  	var listenBotSo = true;
+    var listenBotSlug = true;
+    var clientid = globalConfig.clientid;
+    var clientSec = globalConfig.clientSec;
+    var ClientAuthURL;
+    var clientAuth;
+    var soChannel;
+    var soID = 0;
+    var boardstr = globalConfig.channelName;
+    var boardID;
+    var RanClip = 0;
+  
+    var Start = 0;
+
+
+    container.style.visibility = 'hidden';
+    var oAuth = new XMLHttpRequest();
+    oAuth.onreadystatechange = () => {
+    if (oAuth.readyState === XMLHttpRequest.DONE) {
+        clientAuth = JSON.parse(oAuth.responseText).access_token;
+        console.log(clientAuth);
+        getSOID(); 
+        }
+     };
+   	oAuth.open("POST",'https://id.twitch.tv/oauth2/token?client_id='+clientid+'&client_secret='+clientSec+'&grant_type=client_credentials');
+    oAuth.send();
+   
+    ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
+      
+      if( flags.broadcaster && command == AlwaysRepeat || flags.mod && command == AlwaysRepeat || flags.mod && command == AlwaysRepeat2 || flags.broadcaster && command == AlwaysRepeat2  ) {  
+          
+         do
+          {
+            console.log('Waiting for SOID')
+          }
+          while (soID == 0);
+          Repeat = 0;
+          check.innerHTML = AlwaysRepeatText;
+          barklord();
+      }
+      
+      if( flags.broadcaster && command == NoRepeat || flags.mod && command == NoRepeat || flags.mod && command == NoRepeat2 || flags.broadcaster && command == NoRepeat2  ) {  
+          Repeat = 1;
+          do
+          {
+            console.log('Waiting for SOID')
+          }
+          while (soID == 0);
+          check.innerHTML = NoRepeatText;
+          barklord();
+          
+      }  
+      if(command === "resetso" && flags.broadcaster || command === "resetso" && flags.mod){
+          location.reload();
+      }
+    };
+
+
+      ComfyJS.Init( boardstr );//, "oauth:" );
+      
+      function getSOID() {
+        var oUser = new XMLHttpRequest();
+        oUser.onreadystatechange = () => {
+        if (oUser.readyState === XMLHttpRequest.DONE) {
+            soID = JSON.parse(oUser.responseText);
+            soID = soID.data[0].id
+            console.log('SOD');
+            console.log(soID);
+          }
+        };
+        oUser.open("GET","https://api.twitch.tv/helix/users?login="+boardstr);
+        oUser.setRequestHeader('client-id', clientid);
+		    oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
+        oUser.send();
+        console.log(oUser);      
+      };
+
+      function barklord(){             
+        function reqListener () {
+                mp4Res = JSON.parse(this.responseText);              
+                //console(mp4Res.data);
+                //mp4Res = this.responseText;
+                //var RanClip = Math.floor(Math.random() * mp4Res.data.length);
+                console.log(mp4Res.data.length);
+                if(mp4Res.data.length > 5) 
+                {
+                    mp4Res.data.forEach(obj => {                
+                    mp4 = obj.thumbnail_url
+                    let submp4 = mp4.split('-preview');
+                    console.log(submp4[0]+".mp4");
+                    console.log(mp4);                  
+                    clips.push(submp4[0]+".mp4");
+                    names.push('');
+                    commandType.push("clip");
+                    console.log("Clip Found");
+                    });
+                  } 
+                  else {
+                    console.log("No Clips Found");
+                  }                
+        }
+        //console.log(message);
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+'&first=100')
+        oReq.setRequestHeader('client-id', clientid);
+        oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);        
+        oReq.send();
+        console.log(oReq);	        
+      };    
+
+  function playVid(url) {
+        isVideoPlaying = true;
+        //if(commandType[0] === "clip") {
+            container.style.visibility = 'visible';
+            check.style.visibility = 'visible';
+            names[0] = names[0].replace("@", "");
+            //streamer.innerHTML = names[0];
+            console.log("Playing Clip")
+        //  }
+		  
+        video.setAttribute('src', url);
+	      video.muted = false;        
+        video.play();
+      }
+    
+      video.onended = function() {
+       removeVid();
+    };
+
+    setInterval(function(){ 
+    if(clips.length > 0) {
+      console.log('We have Clips') 
+      console.log(clips.length);
+      if(!isVideoPlaying) {
+        RanClip = Math.floor(Math.random() * clips.length);
+        console.log(RanClip);
+        playVid(clips[RanClip]);
+        }
+      }  else {
+      if (Repeat == 0 && Start != 0)
+        {
+          barklord();
+        }  
+      }  
+    }, 1000);
+
+    function removeVid(){
+		    video.muted = true;
+        video.currentTime = 0;
+		    video.src = "";
+        //container.style.visibility = 'hidden';
+        //check.style.visibility = 'hidden';
+        //slugInfo.style.visibility = 'hidden';
+        slugInfoTwo.style.visibility = 'hidden';
+        console.log(RanClip);
+        var kill = RanClip;
+        console.log(kill)
+        clips.splice(kill,1);
+        names = names.slice(1);
+        //commandType = commandType.slice(1);
+        console.log("Clip Ended!");
+        isVideoPlaying = false;
+        //RanClip = 0;
+    }
+
+     setInterval(function(){ 
+        if(video.currentTime >= 90){
+            removeVid();
+        }
+    }, 800);    
+    </script>
+  </body>
+</html>

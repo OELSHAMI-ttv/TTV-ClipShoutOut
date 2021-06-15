@@ -5,12 +5,26 @@ var globalConfig = {
     clientid: '<clientID>',
     clientSec: '<clientSec>',
     channelName: '<Channel Name>',
+    //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read
+    //Generate oAuth from twitchtokengenerator.com
     oAuth: '<oAuth>' //required only if you want to chat back, otherwise DO NOT TOUCH
 }
+
+//ShoutoutRepeat
+var AlwaysRepeat = 'brb';
+var AlwaysRepeat2 = 'beback';
+var AlwaysRepeatText = "Be Right Back";
+var NoRepeat = 'hype';
+var NoRepeat2 = 'hypes'
+var NoRepeatText = 'HYPE';
+var Repeat = 2; //Set to 0 if you want this to autostart without a command.
+
+//Shoutout
 var cmd1 = 'shoutout';
 var cmd2 = 'so';
 var cmd3 = 'SuperEvilMonkey420'
 var cmd4 = 'SEM420'
+
 var Everyone = 'oldman'; //Shouts out everyone with a Speak of 1 and drops into Chat a ShoutOut
 var VipsOnly = 'agent47';//Shouts out VIP's (Array you listed at 2) and a Speak of 1
 var SilentEVERYONE = 'leon';//Shouts out everyone with a Speak of 1, no Chat Spam
