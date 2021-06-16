@@ -17,9 +17,9 @@
         //Init ComfyJS to your Channels Chat
         if (globalConfig.oAuth == '<oAuth>')
             {
-                ComfyJS.Init( boardstr );
+                ComfyJS.Init( boardCAST );
             } else {
-                ComfyJS.Init( boardstr , "oauth:" + globalConfig.oAuth );
+                ComfyJS.Init( boardCAST, "oauth:" + globalConfig.oAuth );
             }
 
         ComfyJS.onJoin = (user, self, extra) => {
