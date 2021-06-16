@@ -63,4 +63,3 @@ var clipsArray = [
     ,{ name: 'rainmaker', gen:4, speak: 2}
     ,{ name: 'SoundAlerts', gen:4, speak: 2}
 ];
-// Go get to know @" + element.name + ". You can give them a follow at https://twitch.tv/" + element.name
