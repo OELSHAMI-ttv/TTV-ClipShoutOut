@@ -1,16 +1,14 @@
-
-
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/comfy.js/dist/comfy.min.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
   </head>
   <style>
     body {
       margin:0px;
     }
     #check {
-      font-family: 'Bangers';
+      font-family: 'Audiowide';
       font-size: 3em;
       word-wrap: none;
       visibility: hidden;
@@ -30,10 +28,10 @@
         
     }
     #slugInfo {
-      font-family: 'Bangers';
+      font-family: 'Audiowide';
       font-size: 3em;
       word-wrap: none;
-      visibility: hidden;
+     
       top:0px;
       position:absolute;
       z-index: 10;
@@ -43,7 +41,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 700px;
-      -webkit-text-stroke: 1px black;
+      -webkit-text-stroke: 1px rgba(0, 0, 0, 0);
         color: white;
         text-shadow:
         3px 3px 0 #000,
@@ -53,7 +51,7 @@
         1px 1px 0 #000;
     }
     #slugInfoTwo {
-      font-family: 'Bangers';
+      font-family: 'Audiowide';
       font-size: 3em;
       word-wrap: none;
       visibility: hidden;
@@ -66,7 +64,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 700px;
-      -webkit-text-stroke: 1px black;
+      -webkit-text-stroke: 1px rgba(0, 0, 0, 0);
         color: white;
         text-shadow:
         3px 3px 0 #000,
@@ -77,6 +75,7 @@
     }
 
     #video {
+      visibility: hidden;
       width:100%;
       height:100%;
       top:0px;
@@ -86,332 +85,353 @@
 		color: #5e199e;
 	}
   </style>
-  <body><div id="slugInfo"></div><div id="check">Bark Lord Certified <span id="streamer">streamer</span></div><div id="player">
-    <video id="video" width="100%" height="100%" autoplay >
+  <body><div id="slugInfo"></div>
+    <div id="check"><span id="SOTitle"></span><span id="streamer">streamer</span></div>
+    <div id="player">
+    <video id="video" style="background-color: rgba(42, 179, 94, 0);" width="100%" height="100%" autoplay >
       <source src="" type="video/mp4">
       Your browser does not support the video tag.
-    </video><div id="slugInfoTwo"></div>
-    </div>
-    <script type="text/javascript">
-    
-    var video = document.getElementById('video');
-    var container = document.getElementById('video');
-    var check = document.getElementById('check');
-    var slogInfo = document.getElementById('slugInfo');
-    var slogInfoTwo = document.getElementById('slugInfoTwo');
-    var streamer = document.getElementById('streamer');
-    var clips = [];
-    var names = [];
-    var slugClip;
-    var slugId = [];
-    var slugViewCount = [];
-    var slugCreator = [];
-    var slugDate = [];
-    var slugTitle = [];
-    var commandType = [];
-    var isVideoPlaying;
-    var mp4Res;
-  	var listenBotSo = true;
-    var listenBotSlug = true;
-    var clientid = 'Replace with your TwitchAppID from the Dev Twitch' //AppID from Dev Console
-    var clientSec = 'Replace with your Twitch App Secert here' //App Secert from Dev Console
-    var ClientAuthURL;
-    var clientAuth;
-    var soChannel;
-    var soID;
-    var boardstr = "<YourTwitchChannel>"		    
+    </video><div id="slugInfoTwo" style="color: rgba(216, 43, 43, 0); background-color:rgba(214, 44, 44, 0);"></div>
+        <script type="text/javascript">
 
-    container.style.visibility = 'hidden';
-    var oAuth = new XMLHttpRequest();
-    oAuth.onreadystatechange = () => {
-    if (oAuth.readyState === XMLHttpRequest.DONE) {
-        clientAuth = JSON.parse(oAuth.responseText).access_token;
-        console.log(clientAuth);
-        }
-      };
-    
-   	oAuth.open("POST",'https://id.twitch.tv/oauth2/token?client_id='+clientid+'&client_secret='+clientSec+'&grant_type=client_credentials');
-    oAuth.send();
-   
-    ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
+            // JavaScript source code
+// Global Config for channel setup
 
+var globalConfig = {
+    clientid: '<clientID>',
+    clientSec: '<clientSec>',
+    channelName: '<Channel Name>',
+    //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read
+    //Generate oAuth from twitchtokengenerator.com
+    oAuth: '<oAuth>' //required only if you want to chat back, otherwise DO NOT TOUCH
+}
 
-      if( flags.broadcaster && command == "bl" || flags.mod && command == "bl" || flags.broadcaster && command == "so" || flags.mod && command == "so"  ) {
-        console.log("So Command Triggered");
-        //console.log(message)
-        
-        soChannel = message.replace("@", "");
+//ShoutoutRepeat
+var AlwaysRepeat = 'brb';
+var AlwaysRepeat2 = 'beback';
+var AlwaysRepeatText = "Be Right Back";
+var NoRepeat = 'hype';
+var NoRepeat2 = 'hypes'
+var NoRepeatText = 'HYPE';
+var Repeat = 2; //Set to 0 if you want this to autostart without a command.
 
-      var oUser = new XMLHttpRequest();
-      oUser.onreadystatechange = () => {
-      if (oUser.readyState === XMLHttpRequest.DONE) {
-        soID = JSON.parse(oUser.responseText);
-        soID = soID.data[0].id
-        console.log(soID);
-        }
-      };
-      oUser.open("GET","https://api.twitch.tv/helix/users?login="+soChannel, false);
-      oUser.setRequestHeader('client-id', clientid);
-			oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
-      oUser.send();
-      console.log(oUser);
-      }
+//Shoutout
+var cmd1 = 'shoutout';
+var cmd2 = 'so';
+var cmd3 = 'SuperEvilMonkey420'
+var cmd4 = 'SEM420'
 
-      
-    if( flags.broadcaster && command == "bl" || flags.mod && command == "bl" || flags.broadcaster && command == "so" || flags.mod && command == "so"  ) {  
-      if(listenBotSo) {
-            function reqListener () {
-              mp4Res = JSON.parse(this.responseText);              
-              //mp4Res = this.responseText;
-              var RanClip = Math.floor(Math.random() * mp4Res.data.length);
-              mp4Res = mp4Res.data[RanClip].thumbnail_url
-              let submp4 = mp4Res.split('-preview');
-              console.log(submp4[0]+".mp4");
-              console.log(mp4Res);
-                if(mp4Res.length > 5) {
-                  clips.push(submp4[0]+".mp4");
-                  names.push(message);
-                  commandType.push("clip");
-                  console.log("Clip Found");
-                } else {
-                  console.log("No Clips Found");
+var Everyone = 'oldman'; //Shouts out everyone with a Speak of 1 and drops into Chat a ShoutOut
+var VipsOnly = 'agent47';//Shouts out VIP's (Array you listed at 2) and a Speak of 1
+var SilentEVERYONE = 'leon';//Shouts out everyone with a Speak of 1, no Chat Spam
+var SilentVips = 'saso';//Shouts out VIP's (Array you listed at 2) and a Speak of 1, no Chat Spam
+//Shout User for String is @{user}
+//Last Game They played is @{lastGame}
+var ShoutOut =  'Go get to know @@{user} who was last seen playing @{lastGame}. You can give them a follow at https://twitch.tv/@{user}';
+
+//Shoutout Title above, if you don't want a title set showTitle: false
+var shoutoutConfig = {
+    showTitle: true,
+    title: '<Shoutout Title Text>'
+}
+
+//Gen 4 streamer/bots
+//Gen 2 VIP
+//Speak 2 - DO NOT SHOUTOUT
+//Speak 1 - Always Shoutout
+//Speak 0 - Only Shoutout when chat/lurking on Channel
+
+var clipsArray = [
+    { name: '<channel name>', gen: 4, speak: 2  }
+    //VIP's 
+    //,{name: <channelName>. gen: 2, speak: 0 } 
+    ,{ name: '<VIP>', gen: 2, speak: 0 }
+    ,{ name: '<VIP2>', gen: 2, speak: 0 }
+    //Regulars
+    //,{name: <channelName>. gen: 1, speak: 0 } 
+    ,{ name: '<regular>', gen: 1, speak: 0 }
+    //Well known Bots
+    ,{ name: 'streamelements', gen:4, speak: 2}
+    ,{ name: 'streamlabs', gen:4, speak: 2}
+    ,{ name: 'nightbot', gen:4, speak: 2}
+    ,{ name: 'moobot', gen:4, speak: 2}
+    ,{ name: 'wisebot', gen:4, speak: 2}
+    ,{ name: 'rainmaker', gen:4, speak: 2}
+    ,{ name: 'SoundAlerts', gen:4, speak: 2}
+];
+// Go get to know @" + element.name + ". You can give them a follow at https://twitch.tv/" + element.name
+            var video = document.getElementById('video');
+            var container = document.getElementById('video');
+            var check = document.getElementById('check');
+            var slogInfo = document.getElementById('slugInfo');
+            var slogInfoTwo = document.getElementById('slugInfoTwo');
+            var streamer = document.getElementById('streamer');
+            var clips = [];
+            var names = [];
+            var slugClip;
+            var slugId = [];
+            var slugViewCount = [];
+            var slugCreator = [];
+            var slugDate = [];
+            var slugTitle = [];
+            var commandType = [];
+            var isVideoPlaying;
+            var mp4Res;
+            var listenBotSo = true;
+            var listenBotSlug = true;
+            var clientid = globalConfig.clientid;
+            var clientSec = globalConfig.clientSec;
+            var ClientAuthURL;
+            var clientAuth;
+            var soChannel;
+            var soID;
+            var boardstr = globalConfig.channelName;
+            SOTitle.innerHTML = shoutoutConfig.title;
+
+            container.style.visibility = 'hidden';
+            var oAuth = new XMLHttpRequest();
+            oAuth.onreadystatechange = () => {
+            if (oAuth.readyState === XMLHttpRequest.DONE) {
+                clientAuth = JSON.parse(oAuth.responseText).access_token;
+                console.log(clientAuth);
+                //getSOID(); 
+                }
+            };
+            oAuth.open("POST",'https://id.twitch.tv/oauth2/token?client_id='+clientid+'&client_secret='+clientSec+'&grant_type=client_credentials');
+            oAuth.send();
+
+            ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
+                console.log(command)
+                if( flags.broadcaster && command == cmd1 || flags.mod && command == cmd1 || flags.broadcaster && command == cmd2 || flags.mod && command == cmd2 || flags.broadcaster && command == cmd3 || flags.mod && command == cmd3 || flags.broadcaster && command == cmd4 || flags.mod && command == cmd4  ) {
+                        soChannel = message.replace("@", "");
+                        if (globalConfig.oAuth != '<oAuth>')
+                                {
+                                    //ComfyJS.Say("!so @" + element.name);
+                                    barks(soChannel);
+                                } 
+                        barkLord(soChannel);                    
+                    }
+                if(command === "resetso" && flags.broadcaster || command === "resetso" && flags.mod){
+                    location.reload();
+                }
+                if (flags.broadcaster && command == Everyone || flags.mod && command == Everyone) {
+                    clipsArray.forEach(element => {
+                        if (element.speak > 0 && element.speak < 2) {
+                            console.log(element.name);                        
+                            if (globalConfig.oAuth != '<oAuth>')
+                                {
+                                    //ComfyJS.Say("!so @" + element.name);
+                                    barks(element.name);
+                                }    
+                                barkLord(element.name);
+                        }
+                    });
+                }
+                if (flags.broadcaster && command == VipsOnly || flags.mod && command == VipsOnly) {
+                    clipsArray.forEach(element => {
+                        if (element.speak > 0 && element.speak < 2 && element.gen == 2) {
+                            console.log(element.name);                        
+                            if (globalConfig.oAuth != '<oAuth>')
+                                {
+                                    //ComfyJS.Say("!so @" + element.name);
+                                    barks(element.name);
+                                }    
+                                barkLord(element.name);
+                        }
+                    });
+                }
+                if (flags.broadcaster && command == SilentEVERYONE || flags.mod && command == SilentEVERYONE) {
+                    console.log('WTF');
+                    clipsArray.forEach(element => {
+                        if (element.speak > 0 && element.speak < 2) {
+                            console.log(element.name);
+                            barkLord(element.name);
+                        }
+                    });
+                }
+                if (flags.broadcaster && command == SilentVips || flags.mod && command == SilentVips) {
+                    console.log('WTF');
+                    clipsArray.forEach(element => {
+                        if (element.speak > 0 && element.speak < 2 && element.gen == 2) {
+                            console.log(element.name);
+                            barkLord(element.name);
+                        }
+                    });
+                }
+                if (flags.broadcaster && command == 'solo' || flags.mod && command == 'solo') {
+                    //Add in to do BRB work while Streamer is off. May move into BRB code insteads
                 }
             }
-		   console.log(message);
-          var oReq = new XMLHttpRequest();
-			
-            oReq.addEventListener("load", reqListener);
-			oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
-			oReq.setRequestHeader('client-id', clientid);
-			oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
-			//oReq.responseType = 'json';
-       oReq.send();
-			console.log(oReq);	
-		  
-       }
-    }
+            
 
-   if(command === "resetso" && flags.broadcaster || command === "resetso" && flags.mod){
-               location.reload();
-              }
-
-        
-    
-      if( flags.broadcaster && command == "soreset" || flags.mod && command == "soreset" ) {
-         console.log("Reset Command Sent");
-         clips = [];
-         names = [];
-         slugId = [];
-         slugViewCount = [];
-         slugCreator = [];
-         slugDate = [];
-         slugTitle = [];
-         commandType = [];
-         video.setAttribute('src', '');
-         isVideoPlaying = false;
-         container.style.visibility = 'hidden';
-         check.style.visibility = 'hidden';
-         slugInfo.style.visibility = 'hidden';
-         slugInfoTwo.style.visibility = 'hidden';
-          }
-
-      if( flags.broadcaster && command == "soclipsoff" || flags.mod && command == "soclipsoff" ) {
-        console.log("Turning off Clips");
-	    	listenBotSo = false;
-        }
-
-		  if( flags.broadcaster && command == "soclipson" || flags.mod && command == "soclipson" ) {
-        console.log("Turning on Clips");
-	    	listenBotSo = true;
-        }
-
-      if( flags.broadcaster && command == "soslugsoff" || flags.mod && command == "soslugsoff" ) {
-        console.log("Turning off Slug Clips");
-	    	listenBotSlug = false;
-        }
-		if( flags.broadcaster && command == "soslugson" || flags.mod && command == "soslugson" ) {
-        console.log("Turning on Slug Clips");
-	    	listenBotSlug = true;
-        }
-
-    if( flags.broadcaster && command == "playslug" || flags.mod && command == "playslug" ) {
-          console.log("Slug Command Triggered");
-          if(listenBotSlug) {
-            function reqListener () {
-               slugClip = JSON.parse(this.responseText);
-                if(this.responseText.length > 5) {
-                   commandType.push("slug");
-                   console.log("Found Clip");
-                   clips.push(slugClip[0].mp4)
-                   names.push(slugClip[0].broadcaster_name);
-                   slugCreator.push(slugClip[0].creator_name) 
-                   slugViewCount.push(slugClip[0].view_count)
-                   slugTitle.push(slugClip[0].title)
-                   slugDate.push(slugClip[0].created_at)
-                } else {
-                  console.log("No Clip Found");
-                  }
-          }
-        }
-
-        var oReq = new XMLHttpRequest();
-        oReq.addEventListener("load", reqListener);
-        if(message.includes("clip/")) {
-          console.log("true /");
-          message = message.split("clip/");
-          message = message[1];
-        }
-        if(message.includes("?")){
-          console.log("tr ?");
-          message = message.split("?");
-          message = message[0];
-        }
-		        if(message.includes("clips.twitch.tv")){
-          console.log("clips.twitch");
-          message = message.split(".tv/");
-          message = message[1];
-        }
-        oReq.open("GET", "https://twitch.guru/clipgrab.php?slug="+message);
-        oReq.send();
-        }
-      }
-
-      ComfyJS.onChat = ( user, message, flags, self, extra ) => {
-      console.log( user, message, extra );
-
-      // Reward Section
-      if(flags.customReward && extra.customRewardId === "NOTINUSE"){
-                  console.log("So Reward Triggered");
-                        function reqListener () {
-                mp4Res = this.responseText;
-                console.log(mp4Res);
-                  if(mp4Res.length > 5) {
-                    clips.push(mp4Res);
-                    names.push(message);
-                    commandType.push("clip");
-                    console.log("Clip Found");
-                  } else {
-                    console.log("No Clips Found");
-                  }
-              }
-
-            var oReq = new XMLHttpRequest();
-            oReq.addEventListener("load", reqListener);
-            oReq.open("GET", "https://twitch.guru/clipsapi.php?channel="+message);
-            oReq.send();
+            if (globalConfig.oAuth == '<oAuth>')
+            {
+                ComfyJS.Init( boardstr );
+            } else {
+                ComfyJS.Init( boardstr , "oauth:" + globalConfig.oAuth );
             }
 
-            if(flags.customReward && extra.customRewardId === "off"){
-              console.log("Slug Reward Triggered");
-              function reqListener () {
-               slugClip = JSON.parse(this.responseText);
-                if(this.responseText.length > 5) {
-                   commandType.push("slug");
-                   console.log("Found Clip");
-                   clips.push(slugClip[0].mp4)
-                   names.push(slugClip[0].broadcaster_name);
-                   slugCreator.push(slugClip[0].creator_name) 
-                   slugViewCount.push(slugClip[0].view_count)
-                   slugTitle.push(slugClip[0].title)
-                   slugDate.push(slugClip[0].created_at)
+            ComfyJS.onJoin = (user, self, extra) => {
+                console.log(user);
+                let Use = user;
+                Use = Use.toLowerCase();
+                //console.log (extra);        
+                let Ind = clipsArray.findIndex((obj => obj.name == Use));
+                if (Ind != -1) {
+                    if (clipsArray[Ind].speak == 0 && clipsArray[Ind].gen == 2) {
+                        clipsArray[Ind].speak = 1;
+                    }
+                } else { 
+                    clipsArray.push({ name: Use, gen: 0, speak: 0 });   
+                }
+            }
+
+            ComfyJS.onChat = (user, message, flags, self, extra) => {
+                //console.log("On Chat!");
+                //console.log(user);
+                let Use = user;
+                Use = Use.toLowerCase();
+                let Ind = clipsArray.findIndex((obj => obj.name == Use));
+                if (Ind != -1) {
+                    if (clipsArray[Ind].speak == 0) {
+                        clipsArray[Ind].speak = 1;
+                    }
                 } else {
-                  console.log("No Clip Found");
-                  }
-          }
-        }
+                    clipsArray.push({ name: Use, gen: 1, speak: 1 });
+                }
+            }
 
-        var oReq = new XMLHttpRequest();
-        oReq.addEventListener("load", reqListener);
-        if(message.includes("clip/")) {
-          console.log("true /");
-          message = message.split("clip/");
-          message = message[1];
-        }
-		
-		  if(message.includes("?")){
-          console.log("?");
-          message = message.split("?");
-          message = message[0];
-        }
-		
-        if(message.includes("clips.twitch.tv")){
-          console.log("clips.twitch");
-          message = message.split(".tv/");
-          message = message[1];
-        }
-		
-        }
-		
-     // ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
-	//	if( command === "test" ) {
-	//		//ComfyJS.Say( "replying to !test" );
-	//		}
-	//	}
-      
+            function barks(user)
+            {
+                var oUser = new XMLHttpRequest();
+                oUser.onreadystatechange = () => {
+                    //console.log(soID);
+                    if (oUser.readyState === XMLHttpRequest.DONE)  {
+                        soID = JSON.parse(oUser.responseText);
+                        name = soID.data[0].display_name;
+                        soID = soID.data[0].id;
+                        function reqListener () {
+                            game = JSON.parse(this.responseText);              
+                            //JSON game_name
+                            // soID = soID.data[0].id
+                            lastGame = game.data[0].game_name;
+                            //Shout User for String is ${user}
+                            //Last Game They played is ${lastGame}
+                            var Out = ShoutOut.replace(/@{user}/g,name);
+                            Out = Out.replace(/@{lastGame}/g,lastGame);
+                            ComfyJS.Say(Out);
+                            //ComfyJS.Say(`Go get to know @${user} who was last seen playing ${lastGame}. You can give them a follow at https://twitch.tv/${user}`);   
+                        }
+                        var oReq = new XMLHttpRequest();                    
+                        oReq.addEventListener("load", reqListener);
+                        //https://api.twitch.tv/helix/channels?broadcaster_id=141981764'
+                        oReq.open("GET","https://api.twitch.tv/helix/channels?broadcaster_id="+soID)
+                        oReq.setRequestHeader('client-id', clientid);
+                        oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);                    
+                        oReq.send();
+                        console.log(oReq);
+                        console.log("So Command Triggered");
+                    }
+                }  
+                oUser.open("GET","https://api.twitch.tv/helix/users?login="+user);
+                oUser.setRequestHeader('client-id', clientid);
+                oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
+                oUser.send();
+                console.log(oUser);
+            }
 
-      ComfyJS.Init( boardstr );//, "oauth:" );
-     
-      function playVid(url) {
-        isVideoPlaying = true;
-        if(commandType[0] === "clip") {
-            container.style.visibility = 'visible';
-            check.style.visibility = 'visible';
-            names[0] = names[0].replace("@", "");
-            streamer.innerHTML = names[0];
-            console.log("Playing Clip")
-          } else {
-            container.style.visibility = 'visible';
-            check.style.visibility = 'hidden';
-            slugInfo.style.visibility = 'visible';
-            slugInfoTwo.style.visibility = 'visible';
-            names[0] = names[0].replace("@", "");
-            slugInfo.innerHTML = "<span id='streamerName'>"+names[0]+":</span> "+slugTitle[0];
-            slugInfoTwo.innerHTML = "<h6>Clipped by:"+slugCreator[0]+" on: "+slugDate[0].substring(0,10)+"</h6>";
-            streamer.innerHTML = names[0];
-            console.log("playing slug")
-          }
-		  
-        video.setAttribute('src', url);
-	      video.muted = false;        video.play();
-      }
+            function barkLord(soChannel) {
+                    var oUser = new XMLHttpRequest();
+                    oUser.onreadystatechange = () => {
+                    if (oUser.readyState === XMLHttpRequest.DONE) {
+                        soID = JSON.parse(oUser.responseText);
+                        soID = soID.data[0].id
+                        console.log(soID);
+                        //Start
+                            function reqListener () {
+                            mp4Res = JSON.parse(this.responseText);              
+                            //mp4Res = this.responseText;
+                            var RanClip = Math.floor(Math.random() * mp4Res.data.length);
+                            mp4Res = mp4Res.data[RanClip].thumbnail_url
+                            let submp4 = mp4Res.split('-preview');
+                            console.log(submp4[0]+".mp4");
+                            console.log(mp4Res);
+                                if(mp4Res.length > 5) {
+                                clips.push(submp4[0]+".mp4");
+                                names.push(soChannel);
+                                commandType.push("clip");
+                                console.log("Clip Found");
+                                } else {
+                                console.log("No Clips Found");
+                                }
+                            }
+                            //console.log(message);
+                            var oReq = new XMLHttpRequest();                    
+                            oReq.addEventListener("load", reqListener);
+                            oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
+                            oReq.setRequestHeader('client-id', clientid);
+                            oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);                    
+                            oReq.send();
+                            console.log(oReq);
+                            console.log("So Command Triggered");
+                            //console.log(message)
+                        //finish
+                        }
+                    };
+                    oUser.open("GET","https://api.twitch.tv/helix/users?login="+soChannel);
+                    oUser.setRequestHeader('client-id', clientid);
+                    oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
+                    oUser.send();
+                    console.log(oUser);
+            };
+
+            function playVid(url) {
+                isVideoPlaying = true;
+                container.style.visibility = 'visible';
+                //check.style.visibility = 'visible';
+                shoutoutConfig.showTitle ? check.style.visibility = 'visible' : check.style.visibility = 'hidden';
+                names[0] = names[0].replace("@", "");
+                streamer.innerHTML = names[0];
+                console.log("Playing Clip")  
+                video.setAttribute('src', url);
+                video.muted = false;        
+                video.play();
+            }
     
-      video.onended = function() {
-       removeVid();
-    };
+            video.onended = function() {
+                removeVid();
+            };
 
-    setInterval(function(){ 
-    if(clips.length > 0) {
-      if(!isVideoPlaying) {
-        playVid(clips[0]);
-        }
-      }    
-    }, 1000);
+            setInterval(function(){ 
+                if(clips.length > 0) 
+                {
+                    if(!isVideoPlaying) {
+                        playVid(clips[0]);
+                    }
+                }    
+            }, 1000);
 
-    function removeVid(){
-		video.muted = true;
-        video.currentTime = 0;
-		video.src = "";
-        container.style.visibility = 'hidden';
-        check.style.visibility = 'hidden';
-        slugInfo.style.visibility = 'hidden';
-        slugInfoTwo.style.visibility = 'hidden';
-        isVideoPlaying = false;
-        clips = clips.slice(1);
-        names = names.slice(1);
-        if(commandType[0] === "slug"){
-          slugCreator = slugCreator.slice(1);
-          slugViewCount = slugViewCount.slice(1);
-          slugTitle = slugTitle.slice(1);
-          slugDate = slugDate.slice(1);
-        }
-        commandType = commandType.slice(1);
-        console.log("Clip Ended!");
-    }
+            function removeVid(){
+                video.muted = true;
+                video.currentTime = 0;
+                video.src = "";
+                container.style.visibility = 'hidden';
+                check.style.visibility = 'hidden';
+                slugInfo.style.visibility = 'hidden';
+                slugInfoTwo.style.visibility = 'hidden';
+                isVideoPlaying = false;
+                clips = clips.slice(1);
+                names = names.slice(1);
+                commandType = commandType.slice(1);
+                console.log("Clip Ended!");
+            }
 
-     setInterval(function(){ 
-        if(video.currentTime >= 90){
-            removeVid();
-        }
-    }, 800);    </script>
-  </body>
+            setInterval(function(){ 
+                if(video.currentTime >= 90){
+                    removeVid();
+                }
+            }, 800);    
+
+        </script>
+    </body>
 </html>
