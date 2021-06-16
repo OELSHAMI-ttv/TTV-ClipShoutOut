@@ -16,6 +16,7 @@ var Generic = 0;
 var GenSnd = '<GenericSoundGreeting.mp3>';
 var MaxMe = 5;
 var Silence = 0;
+var cmdMe = "me"
 
 //Welcome User for String is @{user}
 
