@@ -391,7 +391,7 @@ var clipsArray = [
                 //check.style.visibility = 'visible';
                 shoutoutConfig.showTitle ? check.style.visibility = 'visible' : check.style.visibility = 'hidden';
                 names[0] = names[0].replace("@", "");
-                streamer.innerHTML = names[0];
+                streamer.innerHTML = ' ' + names[0];
                 console.log("Playing Clip")  
                 video.setAttribute('src', url);
                 video.muted = false;        
