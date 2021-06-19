@@ -311,15 +311,15 @@ var clipsArray = [
                         name = soID.data[0].display_name;
                         soID = soID.data[0].id;
                         function reqListener () {
-                            game = JSON.parse(this.responseText);              
-                            //JSON game_name
-                            // soID = soID.data[0].id
+                            game = JSON.parse(this.responseText);                                                                      
                             lastGame = game.data[0].game_name;
+                            uName = game.data[0].broadcaster_name;
                             //Shout User for String is ${user}
                             //Last Game They played is ${lastGame}
-                            var Out = ShoutOut.replace(/@{user}/g,name);
-                            Out = Out.replace(/@{lastGame}/g,lastGame);
-                            ComfyJS.Say(Out);
+                            console.log(game)
+                            var Out = ShoutOut.replace(/@{user}/g,uName);
+                            Out = Out.replace(/@{lastGame}/g,lastGame);                            
+                            ComfyJS.Say(Out);   
                             //ComfyJS.Say(`Go get to know @${user} who was last seen playing ${lastGame}. You can give them a follow at https://twitch.tv/${user}`);   
                         }
                         var oReq = new XMLHttpRequest();                    
