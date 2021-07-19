@@ -8,7 +8,7 @@
     body {
       margin:0px;
     }
-    #check {
+    #SODivs {
       font-family: 'Audiowide';
       font-size: 3em;
       word-wrap: none;
@@ -28,7 +28,7 @@
         1px 1px 0 #000;
         
     }
-    #video {
+    #vids {
       visibility: hidden;
       width:100%;
       height:100%;
@@ -40,25 +40,21 @@
 	}
   </style>
   <body>
-    <div id="check">Be Right Back!</div>
+    <div id="SODivs">Be Right Back!</div>
     <div id="player">
-    <video id="video" style="background-color: rgba(42, 179, 94, 0);" width="100%" height="100%" autoplay >
+    <video id="vids" style="background-color: rgba(42, 179, 94, 0);" width="100%" height="100%" autoplay >
       <source src="" type="video/mp4">
-      Your browser does not support the video tag.
+      Your browser does not support the vids tag.
     </video>
     <script type="text/javascript">
     
-    var video = document.getElementById('video');
-    var container = document.getElementById('video');
-    var check = document.getElementById('check');    
+    var vids = document.getElementById('vids');
+    var container = document.getElementById('vids');
+    var SODivs = document.getElementById('SODivs');    
     var streamer = document.getElementById('streamer');
-    var clips = [];
-    var names = [];
-    var commandType = [];
-    var isVideoPlaying;
-    var mp4Res;
-  	var listenBotSo = true;
-    var listenBotSlug = true;
+    var clips = [];    
+    var isVidActive;
+    var mp4Name;
     var clientid = globalConfig.clientid;
     var clientSec = globalConfig.clientSec;
     var ClientAuthURL;
@@ -93,7 +89,7 @@
           }
           while (soID == 0);
           Repeat = 0;
-          check.innerHTML = AlwaysRepeatText;
+          SODivs.innerHTML = AlwaysRepeatText;
           barklord();
       }
       
@@ -104,7 +100,7 @@
             console.log('Waiting for SOID')
           }
           while (soID == 0);
-          check.innerHTML = NoRepeatText;
+          SODivs.innerHTML = NoRepeatText;
           barklord();
           
       }  
@@ -135,18 +131,16 @@
 
       function barklord(){             
         function reqListener () {
-                mp4Res = JSON.parse(this.responseText);                              
-                console.log(mp4Res.data.length);
-                if(mp4Res.data.length >= 1) 
+                mp4Name = JSON.parse(this.responseText);                              
+                console.log(mp4Name.data.length);
+                if(mp4Name.data.length >= 1) 
                 {
-                    mp4Res.data.forEach(obj => {                
+                    mp4Name.data.forEach(obj => {                
                     mp4 = obj.thumbnail_url
                     let submp4 = mp4.split('-preview');
                     console.log(submp4[0]+".mp4");
                     console.log(mp4);                  
                     clips.push(submp4[0]+".mp4");
-                    names.push('');
-                    commandType.push("clip");
                     console.log("Clip Found");
                     });
                   } 
@@ -164,23 +158,22 @@
       };    
 
   function playVid(url) {
-        isVideoPlaying = true;        
+        isVidActive = true;        
             container.style.visibility = 'visible';
-            check.style.visibility = 'visible';
-            names[0] = names[0].replace("@", "");            
+            SODivs.style.visibility = 'visible';            
             console.log("Playing Clip")
-        video.setAttribute('src', url);
-	      video.muted = false;        
-        video.play();
+        vids.setAttribute('src', url);
+	      vids.muted = false;        
+        vids.play();
       }    
-      video.onended = function() {
+      vids.onended = function() {
       removeVid();
     };
 
     setInterval(function(){ 
     if(clips.length > 0) {      
       console.log(clips.length);
-      if(!isVideoPlaying) {
+      if(!isVidActive) {
         RanClip = Math.floor(Math.random() * clips.length);
         console.log(RanClip);
         playVid(clips[RanClip]);
@@ -194,21 +187,21 @@
     }, 1000);
 
     function removeVid(){
-		    video.muted = true;
-        video.currentTime = 0;
-		    video.src = "";        
-        check.style.visibility = 'hidden';        
+		    vids.muted = true;
+        vids.currentTime = 0;
+		    vids.src = "";        
+        SODivs.style.visibility = 'hidden';        
         console.log(RanClip);
         var kill = RanClip;
         console.log(kill)
         clips.splice(kill,1);
-        names = names.slice(1);        
+        //names = names.slice(1);        
         console.log("Clip Ended!");
-        isVideoPlaying = false;        
+        isVidActive = false;        
     }
 
      setInterval(function(){ 
-        if(video.currentTime >= 90){
+        if(vids.currentTime >= 90){
             removeVid();
         }
     }, 500);    
