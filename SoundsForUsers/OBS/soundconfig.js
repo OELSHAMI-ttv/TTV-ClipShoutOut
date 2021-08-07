@@ -21,7 +21,11 @@ var cmdMe = "me"
 var silent = 'silence'
 var quiet = 'quiet'
 var wakeup = 'wakeup'
-var CoolDown = 15000
+var CoolDown = 15000 //ms
+var CoolUserDown = 15000 //ms
+var CoolModDown = 500 //ms
+var CoolVIPDown = 5000 //ms
+var CoolSubDown = 7500 //ms
 
 //Welcome User for String is @{user}
 
@@ -37,11 +41,16 @@ var clipsArray = [
 ];
 
 var cmdArray = [
-    { command: '<enter cmdname>', file: '<SoundFileName>', flag: '<Enter Users Flags>', user: '<twitch user>' }
-   ,{ command: '<enter cmdname>', file: '<SoundFileName>', flag: '<Enter Users Flags>', user: '<twitch user>'}
+    { command: '<enter cmdname>', file: '<SoundFileName>', flag: '<Enter Users Flags>' }
+   ,{ command: '<enter cmdname>', file: '<SoundFileName>', flag: '<Enter Users Flags>' }
    //Flags:
    // broadcaster, mod, vip, sub, all or Twitch User
    // broadcaster: broadcaster, mod: mod, vip: vip, sub : sub user:twitchName, all : all
    //Can combine broadcastermodvipsuball or anywhich way.
+];  
+
+var cmdUserArray = [
+    { command: '<enter cmdname>', file: '<SoundFileName>', user: '<twitch user>' }
+   ,{ command: '<enter cmdname>', file: '<SoundFileName>', user: '<twitch user>' }   
    //Twitch User can be user name oelshamikingkira66 but if no user is required leave '<twitch user>'
 ];  

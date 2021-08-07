@@ -84,51 +84,104 @@
                                 } 
                         barkLord(soChannel);                    
                     }
-                if(command === "resetso" && flags.broadcaster || command === "resetso" && flags.mod){
+
+                if(command == resetso && flags.broadcaster || command == resetso && flags.mod){
                     location.reload();
                 }
-                if (flags.broadcaster && command == Everyone || flags.mod && command == Everyone) {
-                    clipsArray.forEach(element => {
-                        if (element.speak > 0 && element.speak < 2) {
-                            console.log(element.name);                        
-                            if (globalConfig.oAuth != '<oAuth>')
-                                {                                    
-                                    barks(element.name);
-                                }    
+
+                if (flags.broadcaster && command == onRaid || flags.mod && command == onRaid )
+                {
+                    RaidOn = true;
+                }
+                if (flags.broadcaster && command == offRaid || flags.mod && command == offRaid )
+                {
+                    RaidOn = false;
+                }
+                if (flags.broadcaster && command == onCheer || flags.mod && command == onCheer )
+                {
+                    CheerOn = true;
+                }
+                if (flags.broadcaster && command == offCheer || flags.mod && command == offCheer )
+                {
+                    CheerOn = false;
+                }if (flags.broadcaster && command == onClip || flags.mod && command == onClip )
+                {
+                    ClipOn = true;
+                }if (flags.broadcaster && command == offClip || flags.mod && command == offClip )
+                {
+                    ClipOn = false;
+                }
+                if (flags.broadcaster && command == allOn || flags.mod && command == allOn )
+                {
+                    ClipOn = true;                    
+                    CheerOn = true;
+                    RaidOn = true;
+                }
+                if (flags.broadcaster && command == allOff || flags.mod && command == allOff )
+                {
+                    ClipOn = false;
+                    CheerOn = false;
+                    RaidOn = false;
+                }
+                if (flags.broadcaster && command == minCheer || flags.mod && command == minCheer )
+                {
+                    if (typeof message === 'number')
+                    {
+                        CheerMin = message
+                    }
+                }
+                if (flags.broadcaster && command == minRaid || flags.mod && command == minRaid )
+                {
+                    if (typeof message === 'number')
+                    {
+                        RaidMin = message
+                    }
+                }
+                if (ClipOn == true) 
+                {
+                    if (flags.broadcaster && command == Everyone || flags.mod && command == Everyone) {                    
+                            clipsArray.forEach(element => {
+                            if (element.speak > 0 && element.speak < 2) {
+                                console.log(element.name);                        
+                                if (globalConfig.oAuth != '<oAuth>')
+                                    {                                    
+                                        barks(element.name,'SO');
+                                    }    
+                                    barkLord(element.name);
+                                }                     
+                            });                   
+                    }
+                    if (flags.broadcaster && command == VipsOnly || flags.mod && command == VipsOnly) {
+                            clipsArray.forEach(element => {
+                                if (element.speak > 0 && element.speak < 2 && element.gen == 2) {
+                                    console.log(element.name);                        
+                                    if (globalConfig.oAuth != '<oAuth>')
+                                        {                                    
+                                            barks(element.name,'SO');
+                                        }    
+                                        barkLord(element.name);
+                                }
+                            });
+                    }                    
+                    if (flags.broadcaster && command == SilentEVERYONE || flags.mod && command == SilentEVERYONE) {                    
+                        clipsArray.forEach(element => {
+                            if (element.speak > 0 && element.speak < 2) {
+                                console.log(element.name);
                                 barkLord(element.name);
-                        }
-                    });
-                }
-                if (flags.broadcaster && command == VipsOnly || flags.mod && command == VipsOnly) {
-                    clipsArray.forEach(element => {
-                        if (element.speak > 0 && element.speak < 2 && element.gen == 2) {
-                            console.log(element.name);                        
-                            if (globalConfig.oAuth != '<oAuth>')
-                                {                                    
-                                    barks(element.name);
-                                }    
+                            }
+                        });
+                    }
+                    if (flags.broadcaster && command == SilentVips || flags.mod && command == SilentVips) {                    
+                        clipsArray.forEach(element => {
+                            if (element.speak > 0 && element.speak < 2 && element.gen == 2) {
+                                console.log(element.name);
                                 barkLord(element.name);
-                        }
-                    });
-                }
-                if (flags.broadcaster && command == SilentEVERYONE || flags.mod && command == SilentEVERYONE) {                    
-                    clipsArray.forEach(element => {
-                        if (element.speak > 0 && element.speak < 2) {
-                            console.log(element.name);
-                            barkLord(element.name);
-                        }
-                    });
-                }
-                if (flags.broadcaster && command == SilentVips || flags.mod && command == SilentVips) {                    
-                    clipsArray.forEach(element => {
-                        if (element.speak > 0 && element.speak < 2 && element.gen == 2) {
-                            console.log(element.name);
-                            barkLord(element.name);
-                        }
-                    });
-                }
-                if (flags.broadcaster && command == 'solo' || flags.mod && command == 'solo') {
-                    //Add in to do BRB work while Streamer is off. May move into BRB code insteads
+                            }
+                        });
+                    }
+                    if (flags.broadcaster && command == 'solo' || flags.mod && command == 'solo') {
+                        //Add in to do BRB work while Streamer is off. May move into BRB code insteads
+                    }
                 }
             }
             
@@ -168,7 +221,62 @@
                 }
             }
 
-            function barks(user)
+            ComfyJS.onRaid = ( user, viewers, extra ) => {                
+                console.log('RAID!!!!' + user + ':' + viewers);
+                if (RaidOn == true && viewers >= RaidMin)
+                {
+                    if (globalConfig.oAuth != '<oAuth>')
+                        {                                    
+                            barks(user,'RAID');
+                        }    
+                    barkLord(user);
+                }
+                //console.log(user);           
+            }
+            ComfyJS.onCheer = ( user, message, bits, flags, extra ) => {
+                console.log(user + '-' + message + '-' + bits);
+                if (bits >= CheerMin)
+                {
+                    let Use = user;
+                    Use = Use.toLowerCase(); 
+                    let Ind = cmdBits.findIndex((obj => obj.name == Use));
+                    if (Ind = -1)
+                    {                    
+                        cmdBits.push({ name: user, bitties: bits});  
+                        setTimeout(() => {
+                            if (globalConfig.oAuth != '<oAuth>')
+                            {                                    
+                                barks(user,'SO');
+                            }    
+                            barkLord(user);      
+                        }, ShoutOutDelayBits);                    
+                    } 
+                    else {  
+                        if (cmdBits[Ind].bitties <= bits)
+                        {
+                            if (globalConfig.oAuth != '<oAuth>')
+                                {                                    
+                                    barks(user,'SO');
+                                }  
+                        } 
+                        else
+                        {
+                            cmdBits[Ind].bitties = bits
+                            setTimeout(() => {
+                                if (globalConfig.oAuth != '<oAuth>')
+                                    {                                    
+                                        barks(user,'SO');
+                                    }    
+                                barkLord(user);      
+                            }, ShoutOutDelayBits);
+                        }  
+                    }
+                } else {
+                    console.log('Cheer occurred under Min:' + bits)
+                }
+            }
+
+            function barks(user, SOorRaid)
             {
                 var oUser = new XMLHttpRequest();
                 oUser.onreadystatechange = () => {
@@ -183,7 +291,12 @@
                             //Shout User for String is ${user}
                             //Last Game They played is ${lastGame}
                             console.log(game)
-                            var Out = ShoutOut.replace(/@{user}/g,uName);
+                            if (SOorRaid == 'SO')
+                            {
+                                var Out = ShoutOut.replace(/@{user}/g,uName);
+                            } else {
+                                var Out = RaidMsg.replace(/@{user}/g,uName);
+                            }
                             Out = Out.replace(/@{lastGame}/g,lastGame);                            
                             ComfyJS.Say(Out);                            
                         }
@@ -205,6 +318,9 @@
             }
 
             function barkLord(soChannel) {
+                    var today = new Date();
+                    var oneMonthAgo = new Date();
+                    oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
                     var oUser = new XMLHttpRequest();
                     oUser.onreadystatechange = () => {
                     if (oUser.readyState === XMLHttpRequest.DONE) {
@@ -230,7 +346,8 @@
                             }                            
                             var oReq = new XMLHttpRequest();                    
                             oReq.addEventListener("load", reqListener);
-                            oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
+                            //oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
+                            oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100&started_at="+oneMonthAgo.toISOString()+"&ended_at="+today.toISOString())
                             oReq.setRequestHeader('client-id', clientid);
                             oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);                    
                             oReq.send();
@@ -263,12 +380,21 @@
             };
 
             setInterval(function(){ 
-                if(clips.length > 0) 
+                if (ClipOn == false)
+                {
+                    clips = [];
+                    names = []; 
+                    if (isVidActive)
+                    {
+                        removeVid();
+                    }
+                } 
+                else if(clips.length > 0) 
                 {
                     if(!isVidActive) {
                         playVid(clips[0]);
                     }
-                }    
+                }                  
             }, 1000);
 
             function removeVid(){

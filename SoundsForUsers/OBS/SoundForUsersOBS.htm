@@ -63,8 +63,9 @@
                 console.log('WAKE UP')
             }
             console.log(command);
-
+            let soundFound = false;
             if (command == cmdMe) {
+                soundFound = true;
                 let Use = user;
                 Use = Use.toLowerCase();
                 console.log(Use);
@@ -87,62 +88,90 @@
                 }
             }
             if (flags.broadcaster && command == silent || flags.mod && command == silent) {
-                location.reload();
+                location.reload();                
             }
             if (flags.broadcaster && command == quiet || flags.mod && command == quiet) {
                 Silence = 1;
+                soundFound = true;
             }
             if (flags.broadcaster && command == wakeup || flags.mod && command == wakeup) {
                 Silence = 0;
+                soundFound = true;
                 //ComfyJS.Say("Wake THE FUCK Up Samurai!");
             }
-            let soundFound = false;
+            
             let cmdFound = false
-            let Inx = cmdArray.findIndex((obj => obj.command == command));
-            if (Inx != -1)
-            {
-                cmdFound = true;
-                if (cmdArray[Inx].flag.match('broadcaster') && flags.broadcaster)
-                {
-                    console.log("hey");
-                    mp3.push(cmdArray[Inx].file);
-                    soundFound = true;
-                    //console.log(cmdArray[Inx].file);
-                } else if (cmdArray[Inx].flag.match('mod') && flags.mod)
-                {
-                    mp3.push(cmdArray[Inx].file);
-                    soundFound = true;
-                    //console.log(cmdArray[Inx].file);
-                } else if (cmdArray[Inx].flag.match('vip') && flags.vip)
-                {
-                    mp3.push(cmdArray[Inx].file);
-                    soundFound = true;
-                    //console.log(cmdArray[Inx].file);
-                } else if (cmdArray[Inx].flag.match('sub') && flags.subscriber)
-                {
-                    mp3.push(cmdArray[Inx].file);
-                    soundFound = true;
-                    //console.log(cmdArray[Inx].file);
-                }
-                else if (cmdArray[Inx].flag.match('all'))
-                {
-                    //Cooldown
-                    console.log('all')
-                    soundFound = true;
-                    console.log(extra.sinceLastCommand.any)
-                    if( extra.sinceLastCommand.any >= CoolDown )
-                        {
-                            mp3.push(cmdArray[Inx].file)                            
-                        }
-                }                                
-            }   
-            //Finish!
-            //Need to walk the array for User and Command
-            if (soundFound == false && cmdFound == true)
+           
+            if (soundFound == false)
             {
                 //Add a walk the array function to find if both Command and User are present
                 //let Ix = cmdArray.findIndex((obj => obj.command == command));
+                var i = cmdUserArray.indexOf(command),
+                cmdLMTArray = [];
+                while (i !== -1) {
+                    cmdLMTArray.push(cmdUSerArray[i]);
+                    i = cmdUserArray.indexOf(searchItem, ++i);
+                }                
+                let Use = user;
+                Use = Use.toLowerCase();
+                let Inx = cmdLMTArray.findIndex((obj => obj.user == Use));
+                if (Inx !== -1)
+                {
+                    if( extra.sinceLastCommand.user >= CoolUserDown || extra.sinceLastCommand.user == 0 )
+                    {
+                        mp3.push(cmdLMTArray[Inx].file);
+                        soundFound = true;
+                    }
+                }
             }
+            if (soundFound == false)
+            {
+                let Inx = cmdArray.findIndex((obj => obj.command == command));
+                if (Inx !== -1)
+                {
+                    cmdFound = true;
+                    if (cmdArray[Inx].flag.match('broadcaster') && flags.broadcaster)
+                    {
+                        console.log("hey");
+                        mp3.push(cmdArray[Inx].file);
+                        soundFound = true;
+                        //console.log(cmdArray[Inx].file);
+                    } else if (cmdArray[Inx].flag.match('mod') && flags.mod)
+                    {
+                        if( extra.sinceLastCommand.user >= CoolModDown || extra.sinceLastCommand.user == 0 )
+                        {
+                            mp3.push(cmdArray[Inx].file);
+                            soundFound = true;
+                            //console.log(cmdArray[Inx].file);
+                        }
+                    } else if (cmdArray[Inx].flag.match('vip') && flags.vip)
+                    {
+                        if( extra.sinceLastCommand.user >= CoolVIPDown || extra.sinceLastCommand.user == 0 ) {
+                            mp3.push(cmdArray[Inx].file);
+                            soundFound = true;
+                            //console.log(cmdArray[Inx].file);
+                        }
+                    } else if (cmdArray[Inx].flag.match('sub') && flags.subscriber)
+                    {
+                        if( extra.sinceLastCommand.user >= CoolSubDown || extra.sinceLastCommand.user == 0 ) {
+                            mp3.push(cmdArray[Inx].file);
+                            soundFound = true;
+                            //console.log(cmdArray[Inx].file);
+                        }
+                    }
+                    else if (cmdArray[Inx].flag.match('all'))
+                    {
+                        //Cooldown
+                        console.log('all')
+                        soundFound = true;
+                        console.log(extra.sinceLastCommand.any)
+                        if( extra.sinceLastCommand.any >= CoolDown || extra.sinceLastCommand.user == 0 )
+                            {
+                                mp3.push(cmdArray[Inx].file)                            
+                            }
+                    }                                
+                }   
+            } 
         }
 
         ComfyJS.onChat = (user, message, flags, self, extra) => {

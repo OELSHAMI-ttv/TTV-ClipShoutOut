@@ -1,0 +1,43 @@
+<html >
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/comfy.js/dist/comfy.min.js"></script>
+    <script type='text/javascript' src='obs-websocket.js'></script>    
+    <script type='text/javascript' src='OBSSceneconfig.js'></script>
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+    
+    ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
+
+        if (command === scenecmd && flags.mod || command === scenecmd && flags.broadcaster)
+        {        
+                //const OBSWebSocket = require('obs-websocket-js');
+                var JSONConnect = { address: 'localhost:4444', password: 'Spaceballs' }
+                JSONConnect.address = OBSWebSocketHost 
+                JSONConnect.password = OBSWebSocketPWD
+                obs.connect(JSONConnect)                
+                    .then(data => {
+                                    obs.send('SetCurrentScene', {
+                                    'scene-name': scene2Change2
+                                });
+                            
+                    })
+                    .catch(err => { // Promise convention dicates you have a catch on every chain.
+                        console.log(err);
+                    });
+
+                obs.on('SwitchScenes', data => {
+                    console.log(`New Active Scene: ${data.sceneName}`);
+                });
+                // You must add this handler to avoid uncaught exceptions.
+                obs.on('error', err => {
+                    console.error('socket error:', err);
+                });
+
+            }
+        }   
+    ComfyJS.Init(channelName);
+    
+</script>
