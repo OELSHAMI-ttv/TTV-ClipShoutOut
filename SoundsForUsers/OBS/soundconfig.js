@@ -1,8 +1,6 @@
 // JavaScript source code
 // Global Config for channel setup
-var globalConfig = {
-    clientid: '<clientId>',
-    clientSec: '<clientSec>',
+var globalConfig = {    
     channelName: '<ChannelName>',
     //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read
     //Generate oAuth from twitchtokengenerator.com
@@ -15,7 +13,7 @@ var Generic = 0;
 //Sound can be wav/mp3/ogg (as tested, more may be supported)
 var GenSnd = '<GenericSoundGreeting.mp3>';
 //Do we use a Generic Sound
-var GenSndOn = true;
+var GenSndOn = false;
 var MaxMe = 5;
 var Silence = 0;
 var cmdMe = "me"
