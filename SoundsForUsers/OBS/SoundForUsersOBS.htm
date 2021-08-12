@@ -31,6 +31,7 @@
                     mp3.push(clipsArray[Ind].file);
                     console.log(clipsArray[Ind].file);
                     clipsArray[Ind].run = 1;
+                    //Add Channel Icon Code here
                     if (globalConfig.oAuth != '<oAuth>')
                                 {
                                     var Out = Welcome.replace(/@{user}/g,user);
@@ -55,6 +56,19 @@
                 }
             }
         } 
+
+        ComfyJS.onReward = ( user, reward, cost, message, extra ) => {
+            //console.log( user + " redeemed " + reward + " message: " + message)             
+            var ward = reward;
+            ward.toLowerCase();  
+            let Ind = cmdRewardArray.findIndex((obj => obj.reward == ward));
+                console.log(user + ':' + reward);
+                if (Ind != -1) {       
+                    cmdOut = cmdRewardArray[Ind].command  
+                    fileOut = cmdRewardArray[Ind].file                     
+                    cmdUserArray.push({command: cmdOut, file: fileOut, tuser: user})
+            }
+        }
 
         ComfyJS.onCommand = (user, command, message, flags, extra) => {
             console.log(command)
@@ -114,7 +128,7 @@
                 }                
                 let Use = user;
                 Use = Use.toLowerCase();
-                let Inx = cmdLMTArray.findIndex((obj => obj.user == Use));
+                let Inx = cmdLMTArray.findIndex((obj => obj.tuser == Use));
                 if (Inx !== -1)
                 {
                     if( extra.sinceLastCommand.user >= CoolUserDown || extra.sinceLastCommand.user == 0 )
@@ -185,6 +199,7 @@
                     mp3.push(clipsArray[Ind].file);
                     console.log(Use + ': ' + clipsArray[Ind].file);
                     clipsArray[Ind].run = 1;
+                    //Call Channel Icon Here
                     if (globalConfig.oAuth != '<oAuth>')
                                 {
                                     var Out = Welcome.replace(/@{user}/g,user);

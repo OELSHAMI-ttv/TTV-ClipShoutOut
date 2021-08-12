@@ -14,6 +14,7 @@ const GenericConst = 60;
 var Generic = 0;
 //Sound can be wav/mp3/ogg (as tested, more may be supported)
 var GenSnd = '<GenericSoundGreeting.mp3>';
+//Do we use a Generic Sound
 var GenSndOn = true;
 var MaxMe = 5;
 var Silence = 0;
@@ -28,16 +29,17 @@ var CoolVIPDown = 5000 //ms
 var CoolSubDown = 7500 //ms
 
 //Welcome User for String is @{user}
-
+//Thank you DeviantDreamers for a wonderful way to great someone via Timezone. Love it!
 var Welcome =  "Welcome in my good friend @{user}, it is wonderful that you stopped in. Hope your having an Awesome Timezone @{user}";
 
 
 //User Sound List 
 var clipsArray = [
-    { name: '<username>', file: '<SoundFileForUser>', run: 0 }
-    ,{ name: '<username2>', file: '<SoundFileForUser>', run: 0 }
+    { name: '<username>', file: '<SoundFileForUser>', run: 0, pic: 0 }
+    ,{ name: '<username2>', file: '<SoundFileForUser>', run: 0, pic: 0 }
     //Format to add more
-    //,{ name: 'twitchname', file: 'soundfile', run: 0 }
+    //,{ name: 'twitchname', file: 'soundfile', run: 0, pic: 0 }
+    //Pic 1 will display channel Pic on Join.
 ];
 
 var cmdArray = [
@@ -50,7 +52,11 @@ var cmdArray = [
 ];  
 
 var cmdUserArray = [
-    { command: '<enter cmdname>', file: '<SoundFileName>', user: '<twitch user>' }
-   ,{ command: '<enter cmdname>', file: '<SoundFileName>', user: '<twitch user>' }   
+    { command: '<enter cmdname>', file: '<SoundFileName>', tuser: '<twitch user>' }
+   ,{ command: '<enter cmdname>', file: '<SoundFileName>', tuser: '<twitch user>' }   
    //Twitch User can be user name oelshamikingkira66 but if no user is required leave '<twitch user>'
 ];  
+
+var cmdRewardArray = [
+    { command: '<enter command>', file: '<SoundFileName>',  reward: '<enter reward name>'}
+];
