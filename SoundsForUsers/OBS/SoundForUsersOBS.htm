@@ -120,22 +120,27 @@
             {
                 //Add a walk the array function to find if both Command and User are present
                 //let Ix = cmdArray.findIndex((obj => obj.command == command));
-                //var i = cmdUserArray.indexOf(obj => obj.command === command)
-                var i = cmdUserArray.findIndex(arr => arr.includes(command))
+                cmdRMTArray = [...cmdUserArray]//cmdUserArray
+                var i = cmdRMTArray.findIndex(obj=>obj.command === command)
                 cmdLMTArray = [];
                 while (i !== -1) {
-                    cmdLMTArray.push(cmdUserArray[i]);
-                    //i = cmdUserArray.indexOf(obj => obj.command === command, ++i);
-                    i = cmdUserArray.findIndex(arr => arr.includes(command))
-                }                
-                let Use = user;
-                Use = Use.toLowerCase();
-                let Inx = cmdLMTArray.findIndex((obj => obj.tuser === Use));
+                    console.log(i)
+                    cmdLMTArray.push(cmdRMTArray[i]);
+                    cmdRMTArray.splice(i, 1);
+                    console.log(cmdRMTArray)
+                    i = cmdRMTArray.findIndex(obj=>obj.command === command)
+                }   
+                console.log(cmdLMTArray)             
+                //let Use = user;
+                //Use = Use.toLowerCase();
+                let Inx = cmdLMTArray.findIndex((obj => obj.tuser === user));
                 console.log(Inx)
                 if (Inx !== -1)
-                {
-                    if( extra.sinceLastCommand.user >= CoolUserDown || extra.sinceLastCommand.user == 0 )
+                {   
+                    console.log('Time:' + extra.sinceLastCommand.user)
+                    if( extra.sinceLastCommand.user >= CoolUserDown || extra.sinceLastCommand.user === 0 )
                     {
+                        console.log(cmdLMTArray[Inx].file)
                         mp3.push(cmdLMTArray[Inx].file);
                         soundFound = true;
                     }
