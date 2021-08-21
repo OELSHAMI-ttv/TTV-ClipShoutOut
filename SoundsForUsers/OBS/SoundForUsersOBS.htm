@@ -120,15 +120,18 @@
             {
                 //Add a walk the array function to find if both Command and User are present
                 //let Ix = cmdArray.findIndex((obj => obj.command == command));
-                var i = cmdUserArray.indexOf(command),
+                //var i = cmdUserArray.indexOf(obj => obj.command === command)
+                var i = cmdUserArray.findIndex(arr => arr.includes(command))
                 cmdLMTArray = [];
                 while (i !== -1) {
-                    cmdLMTArray.push(cmdUSerArray[i]);
-                    i = cmdUserArray.indexOf(searchItem, ++i);
+                    cmdLMTArray.push(cmdUserArray[i]);
+                    //i = cmdUserArray.indexOf(obj => obj.command === command, ++i);
+                    i = cmdUserArray.findIndex(arr => arr.includes(command))
                 }                
                 let Use = user;
                 Use = Use.toLowerCase();
-                let Inx = cmdLMTArray.findIndex((obj => obj.tuser == Use));
+                let Inx = cmdLMTArray.findIndex((obj => obj.tuser === Use));
+                console.log(Inx)
                 if (Inx !== -1)
                 {
                     if( extra.sinceLastCommand.user >= CoolUserDown || extra.sinceLastCommand.user == 0 )
