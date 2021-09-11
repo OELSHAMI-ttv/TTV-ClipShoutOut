@@ -53,6 +53,10 @@ var RaidMin = 1 //Min Viewers to Trigger
 var CheerOn = true //Default to Cheer Shouts Outs on!
 var CheerMin = 1 //Min Cheer to Trigger
 var ClipOn = true //Allow Clip Shoutouts
+var recentClips = true //Do we go for recent clips or all.
+var dateRange  = 30 //How many days back to look for clips
+var dateRaidRange = 15 //How Many Days back to look for clips for Raids
+var minClips = 5 //How Many Clips for recent do we need to pull to continue.
 
 //Shoutout Title above, if you don't want a title set showTitle: false
 var shoutoutConfig = {
@@ -83,6 +87,7 @@ var clipsArray = [
     ,{ name: 'wisebot', gen:4, speak: 2}
     ,{ name: 'rainmaker', gen:4, speak: 2}
     ,{ name: 'SoundAlerts', gen:4, speak: 2}
+    ,{ name: 'fossabot', gen:4, speak: 2}
 ];
 
 //cheer Bits To Limit Auto shoutout

@@ -146,7 +146,7 @@
                                 if (globalConfig.oAuth != '<oAuth>')
                                     {                                    
                                         barks(element.name,'SO');
-                                    }    
+                                    }                                        
                                     barkLord(element.name);
                                 }                     
                             });                   
@@ -229,7 +229,13 @@
                         {                                    
                             barks(user,'RAID');
                         }    
-                    barkLord(user);
+                    if (recentClips == true)
+                    {
+                        LordOfTheSith(user,dateRaidRange);
+                    } else 
+                    {
+                        bL(user);
+                    }
                 }
                 //console.log(user);           
             }
@@ -317,7 +323,58 @@
                 console.log(oUser);
             }
 
-            function barkLord(soChannel) {
+            function LordOfTheSith (soChannel, lenOfTime) {
+                var today = new Date();
+                    var oneMonthAgo = new Date();
+                    oneMonthAgo.setDate(oneMonthAgo.getDate() - lenOfTime);
+                    var oUser = new XMLHttpRequest();
+                    oUser.onreadystatechange = () => {
+                    if (oUser.readyState === XMLHttpRequest.DONE) {
+                        soID = JSON.parse(oUser.responseText);
+                        soID = soID.data[0].id
+                        console.log(soID);
+                        //Start
+                            function reqListener () {
+                                mp4Name = JSON.parse(this.responseText); 
+                                if (mp4Name.data.length >= minClips)
+                                {                                         
+                                    var RanClip = Math.floor(Math.random() * mp4Name.data.length);
+                                    mp4Name = mp4Name.data[RanClip].thumbnail_url
+                                    let submp4 = mp4Name.split('-preview');
+                                    console.log(submp4[0]+".mp4");
+                                    console.log(mp4Name);
+                                        if(mp4Name.length > 5) {
+                                        clips.push(submp4[0]+".mp4");
+                                        names.push(soChannel);
+                                        commandType.push("clip");
+                                        console.log("Clip Found");
+                                        } else {
+                                        console.log("No Clips Found");
+                                        }
+                                } else {
+                                    bL(soChannel);
+                                }
+                            }                            
+                            var oReq = new XMLHttpRequest();                    
+                            oReq.addEventListener("load", reqListener);
+                            oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
+                            //oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100&started_at="+oneMonthAgo.toISOString()+"&ended_at="+today.toISOString())                            
+                            oReq.setRequestHeader('client-id', clientid);
+                            oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);                    
+                            oReq.send();
+                            console.log(oReq);
+                            console.log("So Command Triggered");                            
+                        //finish
+                        }
+                    };
+                    oUser.open("GET","https://api.twitch.tv/helix/users?login="+soChannel);
+                    oUser.setRequestHeader('client-id', clientid);
+                    oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
+                    oUser.send();
+                    console.log(oUser);
+            }
+
+            function bL(soChannel) {
                     var today = new Date();
                     var oneMonthAgo = new Date();
                     oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
@@ -346,8 +403,8 @@
                             }                            
                             var oReq = new XMLHttpRequest();                    
                             oReq.addEventListener("load", reqListener);
-                            //oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
-                            oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100&started_at="+oneMonthAgo.toISOString()+"&ended_at="+today.toISOString())
+                            oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
+                            //oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100&started_at="+oneMonthAgo.toISOString()+"&ended_at="+today.toISOString())                            
                             oReq.setRequestHeader('client-id', clientid);
                             oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);                    
                             oReq.send();
@@ -362,6 +419,16 @@
                     oUser.send();
                     console.log(oUser);
             };
+
+            function barkLord(soChannel){
+                if (recentClips == true)
+                {
+                    LordOfTheSith(soChannel,dateRange)
+                } else {
+                    bl(soChannel)
+                }
+
+            }
 
             function playVid(url) {
                 isVidActive = true;
