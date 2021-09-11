@@ -346,7 +346,7 @@
                                         if(mp4Name.length > 5) {
                                         clips.push(submp4[0]+".mp4");
                                         names.push(soChannel);
-                                        commandType.push("clip");
+                                        //commandType.push("clip");
                                         console.log("Clip Found");
                                         } else {
                                         console.log("No Clips Found");
@@ -357,8 +357,8 @@
                             }                            
                             var oReq = new XMLHttpRequest();                    
                             oReq.addEventListener("load", reqListener);
-                            oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
-                            //oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100&started_at="+oneMonthAgo.toISOString()+"&ended_at="+today.toISOString())                            
+                            //oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100")
+                            oReq.open("GET","https://api.twitch.tv/helix/clips?broadcaster_id="+soID+"&first=100&started_at="+oneMonthAgo.toISOString()+"&ended_at="+today.toISOString())                            
                             oReq.setRequestHeader('client-id', clientid);
                             oReq.setRequestHeader('Authorization', 'Bearer '+ clientAuth);                    
                             oReq.send();
@@ -395,7 +395,7 @@
                                     if(mp4Name.length > 5) {
                                     clips.push(submp4[0]+".mp4");
                                     names.push(soChannel);
-                                    commandType.push("clip");
+                                    //commandType.push("clip");
                                     console.log("Clip Found");
                                     } else {
                                     console.log("No Clips Found");
