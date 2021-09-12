@@ -76,7 +76,68 @@
 
             ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
                 console.log(command)
-                if( flags.broadcaster && command == cmd1 || flags.mod && command == cmd1 || flags.broadcaster && command == cmd2 || flags.mod && command == cmd2 || flags.broadcaster && command == cmd3 || flags.mod && command == cmd3 || flags.broadcaster && command == cmd4 || flags.mod && command == cmd4  ) {
+                
+                if(command == resetso && flags.broadcaster || command == resetso && flags.mod){
+                    location.reload();
+                }
+
+                if (flags.broadcaster && command === onRaid.toLowerCase()|| flags.mod && command === onRaid.toLowerCase() )
+                {
+                    RaidOn = true;
+                }
+                if (flags.broadcaster && command === offRaid.toLowerCase() || flags.mod && command === offRaid.toLowerCase() )
+                {
+                    RaidOn = false;
+                }
+                if (flags.broadcaster && command === onCheer.toLowerCase() || flags.mod && command === onCheer.toLowerCase() )
+                {
+                    CheerOn = true;
+                }
+                if (flags.broadcaster && command === offCheer.toLowerCase() || flags.mod && command === offCheer.toLowerCase() )
+                {
+                    CheerOn = false;
+                }
+                if (flags.broadcaster && command === onClip.toLowerCase() || flags.mod && command === onClip.toLowerCase() )
+                {
+                    ClipOn = true;
+                }
+                if (flags.broadcaster && command === offClip.toLowerCase() || flags.mod && command === offClip.toLowerCase() )
+                {
+                    ClipOn = false;
+                    console.log('I turned off the Clip?')
+                }
+                if (flags.broadcaster && command === allOn.toLowerCase() || flags.mod && command === allOn.toLowerCase() )
+                {
+                    ClipOn = true;                    
+                    CheerOn = true;
+                    RaidOn = true;
+                }
+                if (flags.broadcaster && command === allOff.toLowerCase() || flags.mod && command === allOff.toLowerCase() )
+                {
+                    ClipOn = false;
+                    CheerOn = false;
+                    RaidOn = false;
+                }
+                if (flags.broadcaster && command === minCheer.toLowerCase() || flags.mod && command === minCheer.toLowerCase() )
+                {
+                    if (typeof message === 'number')
+                    {
+                        CheerMin = message
+                    }
+                }
+                if (flags.broadcaster && command === minRaid.toLowerCase() || flags.mod && command === minRaid.toLowerCase() )
+                {
+                    console.log("RaidMin")
+                    console.log(message)
+                    if (typeof message === 'number')
+                    {
+                        console.log('Test')
+                        RaidMin = message
+                    }
+                }
+                if (ClipOn === true) 
+                {
+                    if( flags.broadcaster && command == cmd1 || flags.mod && command == cmd1 || flags.broadcaster && command == cmd2 || flags.mod && command == cmd2 || flags.broadcaster && command == cmd3 || flags.mod && command == cmd3 || flags.broadcaster && command == cmd4 || flags.mod && command == cmd4  ) {
                         soChannel = message.replace("@", "");
                         if (globalConfig.oAuth != '<oAuth>')
                                 {
@@ -84,61 +145,7 @@
                                 } 
                         barkLord(soChannel);                    
                     }
-
-                if(command == resetso && flags.broadcaster || command == resetso && flags.mod){
-                    location.reload();
-                }
-
-                if (flags.broadcaster && command == onRaid || flags.mod && command == onRaid )
-                {
-                    RaidOn = true;
-                }
-                if (flags.broadcaster && command == offRaid || flags.mod && command == offRaid )
-                {
-                    RaidOn = false;
-                }
-                if (flags.broadcaster && command == onCheer || flags.mod && command == onCheer )
-                {
-                    CheerOn = true;
-                }
-                if (flags.broadcaster && command == offCheer || flags.mod && command == offCheer )
-                {
-                    CheerOn = false;
-                }if (flags.broadcaster && command == onClip || flags.mod && command == onClip )
-                {
-                    ClipOn = true;
-                }if (flags.broadcaster && command == offClip || flags.mod && command == offClip )
-                {
-                    ClipOn = false;
-                }
-                if (flags.broadcaster && command == allOn || flags.mod && command == allOn )
-                {
-                    ClipOn = true;                    
-                    CheerOn = true;
-                    RaidOn = true;
-                }
-                if (flags.broadcaster && command == allOff || flags.mod && command == allOff )
-                {
-                    ClipOn = false;
-                    CheerOn = false;
-                    RaidOn = false;
-                }
-                if (flags.broadcaster && command == minCheer || flags.mod && command == minCheer )
-                {
-                    if (typeof message === 'number')
-                    {
-                        CheerMin = message
-                    }
-                }
-                if (flags.broadcaster && command == minRaid || flags.mod && command == minRaid )
-                {
-                    if (typeof message === 'number')
-                    {
-                        RaidMin = message
-                    }
-                }
-                if (ClipOn == true) 
-                {
+                    console.log ("Clip is On")
                     if (flags.broadcaster && command == Everyone || flags.mod && command == Everyone) {                    
                             clipsArray.forEach(element => {
                             if (element.speak > 0 && element.speak < 2) {
