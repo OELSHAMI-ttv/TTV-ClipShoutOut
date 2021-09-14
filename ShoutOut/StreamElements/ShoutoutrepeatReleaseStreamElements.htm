@@ -49,6 +49,7 @@
     <script type="text/javascript">
 
     // JavaScript source code
+// JavaScript source code
 // Global Config for channel setup
 
 var globalConfig = {
@@ -67,13 +68,26 @@ var AlwaysRepeatText = "Be Right Back";
 var NoRepeat = 'hype';
 var NoRepeat2 = 'hypes'
 var NoRepeatText = 'HYPE';
+var stop = 'off' //Stop BRB/Hyper.
 var Repeat = 2; //Set to 0 if you want this to autostart without a command.
 
-//Shoutout
+//Shoutout Cmds
 var cmd1 = 'shoutout';
 var cmd2 = 'so';
 var cmd3 = 'SuperEvilMonkey420'
 var cmd4 = 'SEM420'
+var resetso = 'resetso'
+var onRaid = 'RaidOn' //Auto Shoutout on Raids On!
+var minRaid = 'RaidMin' //Change the Min to AutoShout On Raids live
+var minCheer = 'CheerMin' //Change the Min to Auto shoutout on Cheer Live
+var onCheer = 'CheerOn' //Auto Shoutout on Cheer
+var ShoutOutDelayBits = 8000; //Shoutout Delay for Auto Cheer, in ms
+var offRaid = 'RaidOff' //Turn AutoShout On Raid Off
+var offCheer = 'CheerOff' //Turn Auto Shout On on Cheer Off
+var onClip = 'ClipOn' //Turn on Clips
+var offClip = 'ClipOff' //Turn Shoutout Clips off
+var allOff = 'AllOff' //Turn off Everything
+var allOn = 'AllOn' //Turn on Everything
 
 var Everyone = 'oldman'; //Shouts out everyone with a Speak of 1 and drops into Chat a ShoutOut
 var VipsOnly = 'agent47';//Shouts out VIP's (Array you listed at 2) and a Speak of 1
@@ -82,6 +96,18 @@ var SilentVips = 'saso';//Shouts out VIP's (Array you listed at 2) and a Speak o
 //Shout User for String is @{user}
 //Last Game They played is @{lastGame}
 var ShoutOut =  'Go get to know @@{user} who was last seen playing @{lastGame}. You can give them a follow at https://twitch.tv/@{user}';
+var RaidMsg = "You Deadset Legend! Thank you @{user} for the RAID!!! Everyone check out our Bark Lord Certified Friend @ https://www.twitch.tv/@{user} who was playing @{lastGame}";
+
+//shoutVars
+var RaidOn = true //Default to Raid Shout outs on!
+var RaidMin = 1 //Min Viewers to Trigger
+var CheerOn = true //Default to Cheer Shouts Outs on!
+var CheerMin = 1 //Min Cheer to Trigger
+var ClipOn = true //Allow Clip Shoutouts
+var recentClips = true //Do we go for recent clips or all.
+var dateRange  = 30 //How many days back to look for clips
+var dateRaidRange = 15 //How Many Days back to look for clips for Raids
+var minClips = 5 //How Many Clips for recent do we need to pull to continue.
 
 //Shoutout Title above, if you don't want a title set showTitle: false
 var shoutoutConfig = {
@@ -112,11 +138,16 @@ var clipsArray = [
     ,{ name: 'wisebot', gen:4, speak: 2}
     ,{ name: 'rainmaker', gen:4, speak: 2}
     ,{ name: 'SoundAlerts', gen:4, speak: 2}
+    ,{ name: 'fossabot', gen:4, speak: 2}
 ];
-// Go get to know @" + element.name + ". You can give them a follow at https://twitch.tv/" + element.name  
 
-    
-    var vids = document.getElementById('vids');
+//cheer Bits To Limit Auto shoutout
+var cmdBits = [
+    { name: '<channel Name>', bitties: 0}
+  ]
+// Go get to know @" + element.name + ". You can give them a follow at https://twitch.tv/" + element.name  
+//regular code here
+var vids = document.getElementById('vids');
     var container = document.getElementById('vids');
     var SODivs = document.getElementById('SODivs');    
     var streamer = document.getElementById('streamer');
