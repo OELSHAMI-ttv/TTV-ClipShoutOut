@@ -39,7 +39,7 @@
 		color: #5e199e;
 	}
   </style>
-  <body>
+ <body>
     <div id="SODivs"><span id="SOTitle"></span><span id="streamer">streamer</span></div>
     <div id="player">
     <video id="vids" style="background-color: rgba(42, 179, 94, 0);" width="100%" height="100%" autoplay >
@@ -120,19 +120,25 @@
                 }
                 if (flags.broadcaster && command === minCheer.toLowerCase() || flags.mod && command === minCheer.toLowerCase() )
                 {
-                    if (typeof message === 'number')
-                    {
-                        CheerMin = message
+                    var n  
+                    n = parseInt(message);
+                    console.log(n)
+                    if (!(isNaN(n)))
+                    {   
+                        CheerMin = n
+                        console.log(CheerMin)
                     }
                 }
                 if (flags.broadcaster && command === minRaid.toLowerCase() || flags.mod && command === minRaid.toLowerCase() )
                 {
-                    console.log("RaidMin")
-                    console.log(message)
-                    if (typeof message === 'number')
-                    {
-                        console.log('Test')
-                        RaidMin = message
+                    
+                    var n  
+                    n = parseInt(message);
+                    console.log(n)
+                    if (!(isNaN(n)))
+                    {                        
+                        RaidMin = n
+                        console.log(RaidMin)
                     }
                 }
                 if (ClipOn === true) 
@@ -141,11 +147,12 @@
                         soChannel = message.replace("@", "");
                         if (globalConfig.oAuth != '<oAuth>')
                                 {
-                                    barks(soChannel);
+                                    console.log("hello halos")
+                                    barks(soChannel,'SO');
                                 } 
                         barkLord(soChannel);                    
                     }
-                    console.log ("Clip is On")
+                    //console.log ("Clip is On")
                     if (flags.broadcaster && command == Everyone || flags.mod && command == Everyone) {                    
                             clipsArray.forEach(element => {
                             if (element.speak > 0 && element.speak < 2) {
@@ -230,7 +237,7 @@
 
             ComfyJS.onRaid = ( user, viewers, extra ) => {                
                 console.log('RAID!!!!' + user + ':' + viewers);
-                if (RaidOn == true && viewers >= RaidMin)
+                if (RaidOn === true && viewers >= RaidMin)
                 {
                     if (globalConfig.oAuth != '<oAuth>')
                         {                                    
@@ -246,9 +253,10 @@
                 }
                 //console.log(user);           
             }
+            
             ComfyJS.onCheer = ( user, message, bits, flags, extra ) => {
                 console.log(user + '-' + message + '-' + bits);
-                if (bits >= CheerMin)
+                if (bits >= CheerMin && CheerOn === true)
                 {
                     let Use = user;
                     Use = Use.toLowerCase(); 
@@ -327,7 +335,8 @@
                 oUser.setRequestHeader('client-id', clientid);
                 oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
                 oUser.send();
-                console.log(oUser);
+                console.log(user)
+                //console.log(oUser);
             }
 
             function LordOfTheSith (soChannel, lenOfTime) {
