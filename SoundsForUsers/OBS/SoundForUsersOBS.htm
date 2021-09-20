@@ -57,21 +57,38 @@
             }
         } 
 
-        ComfyJS.onReward = ( user, reward, cost, message, extra ) => {
+        ComfyJS.onReward = ( user, reward, cost, message, extra ) => {            
             //console.log( user + " redeemed " + reward + " message: " + message)             
             var ward = reward;
             ward.toLowerCase();  
             let Ind = cmdRewardArray.findIndex((obj => obj.reward == ward));
                 console.log(user + ':' + reward);
-                if (Ind != -1) {       
+                if (Ind != -1) {   
+                    var smsg;    
                     cmdOut = cmdRewardArray[Ind].command  
-                    fileOut = cmdRewardArray[Ind].file                     
-                    cmdUserArray.push({command: cmdOut, file: fileOut, tuser: user})
+                    fileOut = cmdRewardArray[Ind].file
+                    if (cmdRewardArray[Ind].cmdsay != '<Thing to Say Here>') 
+                        {
+                            smsg = cmdRewardArray[Ind].cmdsay.replace(/@{user}/g,user);
+                            smsg = smsg.replace(/@{msg}/g,message);
+                            console.log(smsg)
+                        }   
+                        else 
+                        {
+                            smsg = '<Thing to Say Here>';
+                        }                 
+                    cmdUserArray.push({command: cmdOut, file: fileOut, tuser: user, say: smsg})
+                    //<Thing to Say Here>                        
+                    if (globalConfig.oAuth != '<oAuth>' && cmdRewardArray[Ind].say != '<Thing to Say Here>')
+                            {
+                                var Out = cmdRewardArray[Ind].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
             }
         }
 
         ComfyJS.onCommand = (user, command, message, flags, extra) => {
-            console.log(command)
+            console.log(command)                        
             if (flags.broadcaster && command == 'wakeup' || flags.mod && command == 'wakeup') {
                 Silence = 0;
                 console.log('WAKE UP')
@@ -133,7 +150,8 @@
                 console.log(cmdLMTArray)             
                 //let Use = user;
                 //Use = Use.toLowerCase();
-                let Inx = cmdLMTArray.findIndex((obj => obj.tuser === user));
+                console.log(user)
+                let Inx = cmdLMTArray.findIndex((obj => obj.tuser === user.toLowerCase()));
                 console.log(Inx)
                 if (Inx !== -1)
                 {   
@@ -143,6 +161,12 @@
                         console.log(cmdLMTArray[Inx].file)
                         mp3.push(cmdLMTArray[Inx].file);
                         soundFound = true;
+                        if (globalConfig.oAuth != '<oAuth>' && cmdLMTArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdLMTArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                                console.log(Out);
+                            }
                     }
                 }
             }
@@ -157,6 +181,11 @@
                         console.log("hey");
                         mp3.push(cmdArray[Inx].file);
                         soundFound = true;
+                        if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
                         //console.log(cmdArray[Inx].file);
                     } else if (cmdArray[Inx].flag.match('mod') && flags.mod)
                     {
@@ -164,6 +193,11 @@
                         {
                             mp3.push(cmdArray[Inx].file);
                             soundFound = true;
+                            if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdArray[Inx].Say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
                             //console.log(cmdArray[Inx].file);
                         }
                     } else if (cmdArray[Inx].flag.match('vip') && flags.vip)
@@ -172,6 +206,11 @@
                             mp3.push(cmdArray[Inx].file);
                             soundFound = true;
                             //console.log(cmdArray[Inx].file);
+                            if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
                         }
                     } else if (cmdArray[Inx].flag.match('sub') && flags.subscriber)
                     {
@@ -179,6 +218,11 @@
                             mp3.push(cmdArray[Inx].file);
                             soundFound = true;
                             //console.log(cmdArray[Inx].file);
+                            if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
                         }
                     }
                     else if (cmdArray[Inx].flag.match('all'))
@@ -189,7 +233,12 @@
                         console.log(extra.sinceLastCommand.any)
                         if( extra.sinceLastCommand.any >= CoolDown || extra.sinceLastCommand.user == 0 )
                             {
-                                mp3.push(cmdArray[Inx].file)                            
+                                mp3.push(cmdArray[Inx].file)
+                                if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                                    {
+                                        let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                        ComfyJS.Say(Out);
+                                    }                            
                             }
                     }                                
                 }   

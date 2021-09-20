@@ -41,8 +41,8 @@ var clipsArray = [
 ];
 
 var cmdArray = [
-    { command: '<enter cmdname>', file: '<SoundFileName>', flag: '<Enter Users Flags>' }
-   ,{ command: '<enter cmdname>', file: '<SoundFileName>', flag: '<Enter Users Flags>' }
+    { command: '<enter cmdname>', file: '<SoundFileName>', flag: '<Enter Users Flags>', say: '<Thing to Say Here>'},
+   , { command: '<enter cmdname>', file: '<SoundFileName>', flag: '<Enter Users Flags>', say: '<Thing to Say Here>'},
    //Flags:
    // broadcaster, mod, vip, sub, all or Twitch User
    // broadcaster: broadcaster, mod: mod, vip: vip, sub : sub user:twitchName, all : all
@@ -50,11 +50,12 @@ var cmdArray = [
 ];  
 
 var cmdUserArray = [
-    { command: '<enter cmdname>', file: '<SoundFileName>', tuser: '<twitch user>' }
-   ,{ command: '<enter cmdname>', file: '<SoundFileName>', tuser: '<twitch user>' }   
+    { command: '<enter cmdname>', file: '<SoundFileName>', tuser: '<twitch user>', say: '<Thing to Say Here>' }
+   ,{ command: '<enter cmdname>', file: '<SoundFileName>', tuser: '<twitch user>', say: '<Thing to Say Here>' }
    //Twitch User can be user name oelshamikingkira66 but if no user is required leave '<twitch user>'
 ];  
 
 var cmdRewardArray = [
-    { command: '<enter command>', file: '<SoundFileName>',  reward: '<enter reward name>'}
+    { command: '<enter command>', file: '<SoundFileName>',  reward: '<enter reward name>', say: "<Thing to Say Here>", cmdsay: "<Thing to Say Here>"}
+   ,{ command: '<enter command>', file: '<SoundFileName>',  reward: '<enter reward name>', say: "<Thing to Say Here>", cmdsay: "<Thing to Say Here>"}
 ];
