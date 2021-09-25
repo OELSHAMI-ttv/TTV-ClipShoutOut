@@ -60,6 +60,7 @@
             var clientAuth;
             var soChannel;
             var soID;
+            var boardSOID;
             var boardstr = globalConfig.channelName;
             SOTitle.innerHTML = shoutoutConfig.title;
 
@@ -68,6 +69,7 @@
             oAuth.onreadystatechange = () => {
             if (oAuth.readyState === XMLHttpRequest.DONE) {
                 clientAuth = JSON.parse(oAuth.responseText).access_token;
+                getBroadSOID();
                 console.log(clientAuth);                
                 }
             };
@@ -118,6 +120,15 @@
                     CheerOn = false;
                     RaidOn = false;
                 }
+                if (flags.broadcaster && command === ClipAllow.toLowerCase() || flags.mod && command === ClipAllow.toLowerCase() )
+                {
+                    if (allowClip === true)
+                    {
+                        allowClip = false;
+                    } else {
+                        allowClip = true;
+                    }
+                }
                 if (flags.broadcaster && command === minCheer.toLowerCase() || flags.mod && command === minCheer.toLowerCase() )
                 {
                     var n  
@@ -140,6 +151,10 @@
                         RaidMin = n
                         console.log(RaidMin)
                     }
+                }
+                if (command === clipcmd && allowClip === true && globalConfig.oAuth != '<oAuth>')
+                {
+                    makeClip();
                 }
                 if (ClipOn === true) 
                 {
@@ -296,6 +311,38 @@
                     console.log('Cheer occurred under Min:' + bits)
                 }
             }
+
+            function makeClip()
+            {
+                var oClip = new XMLHttpRequest();
+                oClip.onreadystatechange = () => {
+                if (oClip.readyState === XMLHttpRequest.DONE) {                    
+                    let q = JSON.parse(oClip.responseText);
+                    console.log(q);                
+                    }
+                };
+                oClip.open("POST",'https://api.twitch.tv/helix/clips?broadcaster_id='+boardSOID);
+                oClip.setRequestHeader('client-id', clientid);
+                oClip.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
+                oClip.send();
+            }
+
+            function getBroadSOID() {
+                var oUser = new XMLHttpRequest();
+                oUser.onreadystatechange = () => {
+                if (oUser.readyState === XMLHttpRequest.DONE) {
+                    boardSOID = JSON.parse(oUser.responseText);
+                    boardSOID = boardSOID.data[0].id
+                    console.log('SOD');
+                    console.log(boardSOID);
+                }
+                };
+                oUser.open("GET","https://api.twitch.tv/helix/users?login="+boardstr);
+                oUser.setRequestHeader('client-id', clientid);
+                oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
+                oUser.send();
+                console.log(oUser);      
+            };
 
             function barks(user, SOorRaid)
             {

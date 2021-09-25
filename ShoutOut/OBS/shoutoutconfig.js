@@ -5,7 +5,7 @@ var globalConfig = {
     clientid: '<clientID>',
     clientSec: '<clientSec>',
     channelName: '<Channel Name>',
-    //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read
+    //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read and if you want Clips clips:edit
     //Generate oAuth from twitchtokengenerator.com
     oAuth: '<oAuth>' //required only if you want to chat back, otherwise DO NOT TOUCH
 }
@@ -37,6 +37,8 @@ var onClip = 'ClipOn' //Turn on Clips
 var offClip = 'ClipOff' //Turn Shoutout Clips off
 var allOff = 'AllOff' //Turn off Everything
 var allOn = 'AllOn' //Turn on Everything
+var clipcmd  = 'clip' //Make a Clip
+var ClipAllow = 'ChatClip' //Turns Chat clipping on and off
 
 var Everyone = 'oldman'; //Shouts out everyone with a Speak of 1 and drops into Chat a ShoutOut
 var VipsOnly = 'agent47';//Shouts out VIP's (Array you listed at 2) and a Speak of 1
@@ -53,6 +55,7 @@ var RaidMin = 1 //Min Viewers to Trigger
 var CheerOn = true //Default to Cheer Shouts Outs on!
 var CheerMin = 1 //Min Cheer to Trigger
 var ClipOn = true //Allow Clip Shoutouts
+var allowClip = true //Allow Clips
 var recentClips = true //Do we go for recent clips or all.
 var dateRange  = 30 //How many days back to look for clips
 var dateRaidRange = 15 //How Many Days back to look for clips for Raids
