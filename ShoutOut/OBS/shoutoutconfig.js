@@ -54,7 +54,6 @@ var RaidMin = 2 //Min Viewers to Trigger
 var CheerOn = true //Default to Cheer Shouts Outs on!
 var CheerMin = 10 //Min Cheer to Trigger
 var ClipOn = true //Allow Clip Shoutouts
-var allowClip = true //Allow Clips
 var recentClips = true //Do we go for recent clips or all.
 var dateRange  = 30 //How many days back to look for clips
 var dateRaidRange = 15 //How Many Days back to look for clips for Raids
