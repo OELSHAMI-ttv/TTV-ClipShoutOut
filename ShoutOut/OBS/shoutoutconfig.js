@@ -63,6 +63,7 @@ var minClips = 5 //How Many Clips for recent do we need to pull to continue.
 
 //Clip & Discord Vars
 var clipcmd  = 'clip' //Make a Clip
+var clipcmd2 = 'snap' //Alternate Make a Clip Command
 var allowClip = true //Allow Clips
 var ClipAllow = 'ChatClip' //Turns Chat clipping on and off
 var ClipInterval = 5000; //How Long between creating clips, in ms

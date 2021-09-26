@@ -157,7 +157,7 @@
                         //console.log(allowClip)
                     }
                 }
-                if (command === clipcmd.toLowerCase() && allowClip === true && globalConfig.oAuth != '<oAuth>')
+                if ((command === clipcmd.toLowerCase() || command === clipcmd2.toLowerCase()) && allowClip === true && globalConfig.oAuth != '<oAuth>')
                 {
                     console.log("extra:" + extra.sinceLastCommand.user )
                     if (extra.sinceLastCommand.user >= ClipInterval || extra.sinceLastCommand.user == 0)

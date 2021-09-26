@@ -112,6 +112,7 @@
 
             //Clip & Discord Vars
             var clipcmd  = 'clip' //Make a Clip
+            var clipcmd2 = 'snap' //Alternate Make a Clip Command
             var allowClip = true //Allow Clips
             var ClipAllow = 'ChatClip' //Turns Chat clipping on and off
             var ClipInterval = 5000; //How Long between creating clips, in ms
@@ -269,7 +270,7 @@
                         //console.log(allowClip)
                     }
                 }
-                if (command === clipcmd.toLowerCase() && allowClip === true && globalConfig.oAuth != '<oAuth>')
+                if ((command === clipcmd.toLowerCase() || command === clipcmd2.toLowerCase()) && allowClip === true && globalConfig.oAuth != '<oAuth>')
                 {
                     console.log("extra:" + extra.sinceLastCommand.user )
                     if (extra.sinceLastCommand.user >= ClipInterval || extra.sinceLastCommand.user == 0)
