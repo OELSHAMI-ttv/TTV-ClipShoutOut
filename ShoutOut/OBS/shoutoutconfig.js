@@ -68,10 +68,10 @@ var allowClip = true //Allow Clips
 var ClipAllow = 'ChatClip' //Turns Chat clipping on and off
 var ClipInterval = 5000; //How Long between creating clips, in ms
 var ClipDelay = 5000; //How Many Seconds to wait before looking for the clip in ms (need to be at least 3000 ms)
-var discordWebhook = 'https://discord.com/api/webhooks/891391878937849866/QjkAmNOGvxw10B5mSgd-v4RrkZZcvLe9Ey-H-ljwtvf6soJJZ5_2LspZHYhjJmIj6pU3'; //Webhook to Discord Channel to Post
+var discordWebhook = '<Enter WebHook>'; //Webhook to Discord Channel to Post
 var discordBot = 'Shamis Clip Bot' //Change this to match your discord if you want
-var avatar_url = 'https://i.imgur.com/BfaGUYz.png' //This is a public Internet facing Picture file for the Discord Avatar. Optional
-var contentStr = ' is a legend for clipping this ' //This is anything you want to put in front of the Message for your Clip.
+var avatar_url = '<Enter Avatar URL Img>' //This is a public Internet facing Picture file for the Discord Avatar. Optional
+var contentStr = '<Enter String>' //This is anything you want to put in front of the Message for your Clip.
 
 //Shoutout Title above, if you don't want a title set showTitle: false
 var shoutoutConfig = {
