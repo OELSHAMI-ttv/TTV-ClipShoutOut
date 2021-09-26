@@ -54,9 +54,10 @@
                 clientid: '<clientID>',
                 clientSec: '<clientSec>',
                 channelName: '<Channel Name>',
-                //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read
+                //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read and if you want Clips clips:edit
                 //Generate oAuth from twitchtokengenerator.com
-                oAuth: '<oAuth>' //required only if you want to chat back, otherwise DO NOT TOUCH
+                oAuth: '<oAuth>', //required only if you want to chat back, otherwise DO NOT TOUCH    
+                channelClientID: '<client oAuth ID>' //This is clip client id
             }
 
             //ShoutoutRepeat
@@ -102,10 +103,23 @@
             var CheerOn = true //Default to Cheer Shouts Outs on!
             var CheerMin = 1 //Min Cheer to Trigger
             var ClipOn = true //Allow Clip Shoutouts
+            var allowClip = true //Allow Clips
             var recentClips = true //Do we go for recent clips or all.
             var dateRange  = 30 //How many days back to look for clips
             var dateRaidRange = 15 //How Many Days back to look for clips for Raids
             var minClips = 5 //How Many Clips for recent do we need to pull to continue.
+
+
+            //Clip & Discord Vars
+            var clipcmd  = 'clip' //Make a Clip
+            var allowClip = true //Allow Clips
+            var ClipAllow = 'ChatClip' //Turns Chat clipping on and off
+            var ClipInterval = 5000; //How Long between creating clips, in ms
+            var ClipDelay = 5000; //How Many Seconds to wait before looking for the clip in ms (need to be at least 3000 ms)
+            var discordWebhook = 'https://discord.com/api/webhooks/891391878937849866/QjkAmNOGvxw10B5mSgd-v4RrkZZcvLe9Ey-H-ljwtvf6soJJZ5_2LspZHYhjJmIj6pU3'; //Webhook to Discord Channel to Post
+            var discordBot = 'Shamis Clip Bot' //Change this to match your discord if you want
+            var avatar_url = 'https://i.imgur.com/BfaGUYz.png' //This is a public Internet facing Picture file for the Discord Avatar. Optional
+            var contentStr = ' is a legend for clipping this ' //This is anything you want to put in front of the Message for your Clip.
 
             //Shoutout Title above, if you don't want a title set showTitle: false
             var shoutoutConfig = {
@@ -158,6 +172,7 @@
             var clientAuth;
             var soChannel;
             var soID;
+            var boardSOID;
             var boardstr = globalConfig.channelName;
             SOTitle.innerHTML = shoutoutConfig.title;
 
@@ -166,6 +181,7 @@
             oAuth.onreadystatechange = () => {
             if (oAuth.readyState === XMLHttpRequest.DONE) {
                 clientAuth = JSON.parse(oAuth.responseText).access_token;
+                getBroadSOID();
                 console.log(clientAuth);                
                 }
             };
@@ -215,7 +231,7 @@
                     ClipOn = false;
                     CheerOn = false;
                     RaidOn = false;
-                }
+                }              
                 if (flags.broadcaster && command === minCheer.toLowerCase() || flags.mod && command === minCheer.toLowerCase() )
                 {
                     var n  
@@ -237,6 +253,30 @@
                     {                        
                         RaidMin = n
                         console.log(RaidMin)
+                    }
+                }
+                if (flags.broadcaster && command === ClipAllow.toLowerCase() || flags.mod && command === ClipAllow.toLowerCase() )
+                {
+                    if (allowClip)
+                    {
+                        allowClip = false;
+                        //console.log("AllowClip should be false");
+                        //console.log(allowClip)
+                    } 
+                    else {                        
+                        allowClip = true;
+                        //console.log("AllowClip should be true");
+                        //console.log(allowClip)
+                    }
+                }
+                if (command === clipcmd.toLowerCase() && allowClip === true && globalConfig.oAuth != '<oAuth>')
+                {
+                    console.log("extra:" + extra.sinceLastCommand.user )
+                    if (extra.sinceLastCommand.user >= ClipInterval || extra.sinceLastCommand.user == 0)
+                    {
+                        makeClip(user);
+                    } else {
+                        ComfyJS.Say("Sorry you can only clip once every " + ClipInterval +" ms")
                     }
                 }
                 if (ClipOn === true) 
@@ -361,7 +401,7 @@
                     let Ind = cmdBits.findIndex((obj => obj.name == Use));
                     if (Ind = -1)
                     {                    
-                        cmdBits.push({ name: Use, bitties: bits});    
+                        cmdBits.push({ name: Use, bitties: bits});  
                         setTimeout(() => {
                             if (globalConfig.oAuth != '<oAuth>')
                             {                                    
@@ -394,6 +434,99 @@
                     console.log('Cheer occurred under Min:' + bits)
                 }
             }
+
+            async function makeClip(userName)
+            {                
+                password = "Bearer " + globalConfig.oAuth                
+                chanClientId = globalConfig.channelClientID                
+                let validation = await fetch( "https://api.twitch.tv/helix/clips?broadcaster_id="+boardSOID, {
+                    method: 'POST',
+                    headers: {
+                        "client-Id": chanClientId,
+                        "Authorization": password
+                    }}).then( r => r.json() );
+                
+                console.log(validation)
+                let val = validation.data[0].id
+                console.log(val);
+                getClip(val,userName);                
+            }
+
+            function getClip(clipName,userName)
+            {
+                setTimeout(() => {
+                var UN = userName;
+                console.log("hello")                
+                var oClip = new XMLHttpRequest();
+                oClip.onreadystatechange = () => {
+                    if (oClip.readyState === XMLHttpRequest.DONE)
+                    {
+                        console.log(oClip)
+                        clipStuff = JSON.parse(oClip.responseText);                                
+                        clipStuff = clipStuff.data[0].url;
+                        console.log(clipStuff);
+                        ComfyJS.Say("Hey look a new clip everyone: " + clipStuff);
+                        sendMessage(clipStuff,UN)
+                    }
+                }
+                password = "Bearer " + globalConfig.oAuth                
+                chanClientId = globalConfig.channelClientID
+                getURL = "https://api.twitch.tv/helix/clips?id="+clipName
+                console.log(getURL)
+                oClip.open("GET",getURL)
+                oClip.setRequestHeader('client-id', chanClientId)
+                oClip.setRequestHeader('Authorization', password);
+                oClip.send();
+                }, ClipDelay)
+            }
+
+            function sendMessage(clipUrl,UN) {
+                if (discordWebhook != '<Enter WebHook>')
+                    {   
+                        var conStr = '';
+                        var ava = '';
+                        if (avatar_url != '<Enter Avatar URL Img>' )
+                            {
+                                 ava = avatar_url
+                            } else {
+                                 ava = ''
+                            }               
+                        if (contentStr != '<Enter String>')
+                            {
+                                conStr = UN + " " + contentStr + " ";
+                            }   else {
+                                conStr = UN + " ";
+                            }  
+                        conStr = conStr + " " + clipUrl
+                        const request = new XMLHttpRequest();                        
+                        request.open("POST", discordWebhook);
+                        request.setRequestHeader('Content-type', 'application/json');
+
+                        const params = {
+                            username: discordBot,
+                            avatar_url: ava,
+                            content: conStr
+                        }
+                    request.send(JSON.stringify(params));
+                    }
+            }
+
+            function getBroadSOID() {
+                var oUser = new XMLHttpRequest();
+                oUser.onreadystatechange = () => {
+                if (oUser.readyState === XMLHttpRequest.DONE) {
+                    boardSOID = JSON.parse(oUser.responseText);
+                    boardSOID = boardSOID.data[0].id
+                    console.log('SOD');
+                    console.log(boardSOID);
+                }
+                };
+                oUser.open("GET","https://api.twitch.tv/helix/users?login="+boardstr);
+                oUser.setRequestHeader('client-id', clientid);
+                oUser.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
+                oUser.send();
+                console.log(oUser);      
+            };
 
             function barks(user, SOorRaid)
             {
