@@ -119,16 +119,7 @@
                     ClipOn = false;
                     CheerOn = false;
                     RaidOn = false;
-                }
-                if (flags.broadcaster && command === ClipAllow.toLowerCase() || flags.mod && command === ClipAllow.toLowerCase() )
-                {
-                    if (allowClip === true)
-                    {
-                        allowClip = false;
-                    } else {
-                        allowClip = true;
-                    }
-                }
+                }              
                 if (flags.broadcaster && command === minCheer.toLowerCase() || flags.mod && command === minCheer.toLowerCase() )
                 {
                     var n  
@@ -154,17 +145,22 @@
                 }
                 if (flags.broadcaster && command === ClipAllow.toLowerCase() || flags.mod && command === ClipAllow.toLowerCase() )
                 {
-                    if (allowClip === true)
+                    if (allowClip)
                     {
                         allowClip = false;
-                    } else {
+                        //console.log("AllowClip should be false");
+                        //console.log(allowClip)
+                    } 
+                    else {                        
                         allowClip = true;
+                        //console.log("AllowClip should be true");
+                        //console.log(allowClip)
                     }
                 }
                 if (command === clipcmd.toLowerCase() && allowClip === true && globalConfig.oAuth != '<oAuth>')
                 {
-                    console.log("extra:" + extra.sinceLastCommand.any )
-                    if (extra.sinceLastCommand.any <= ClipInterval || extra.sinceLastCommand.any == 0)
+                    console.log("extra:" + extra.sinceLastCommand.user )
+                    if (extra.sinceLastCommand.user >= ClipInterval || extra.sinceLastCommand.user == 0)
                     {
                         makeClip(user);
                     } else {
@@ -369,27 +365,29 @@
                 oClip.setRequestHeader('client-id', chanClientId)
                 oClip.setRequestHeader('Authorization', password);
                 oClip.send();
-                }, 3000)
+                }, ClipDelay)
             }
 
             function sendMessage(clipUrl,UN) {
-                if (discordWebHook != '<Enter WebHook>')
+                if (discordWebhook != '<Enter WebHook>')
                     {   
+                        var conStr = '';
+                        var ava = '';
                         if (avatar_url != '<Enter Avatar URL Img>' )
                             {
-                                let ava = avatar_url
+                                 ava = avatar_url
                             } else {
-                                let ava = ''
+                                 ava = ''
                             }               
                         if (contentStr != '<Enter String>')
                             {
-                                let conStr = UN + " " + contentStr + " ";
+                                conStr = UN + " " + contentStr + " ";
                             }   else {
-                                let conStr = UN + " ";
+                                conStr = UN + " ";
                             }  
                         conStr = conStr + " " + clipUrl
                         const request = new XMLHttpRequest();                        
-                        request.open("POST", discordWebHook);
+                        request.open("POST", discordWebhook);
                         request.setRequestHeader('Content-type', 'application/json');
 
                         const params = {
