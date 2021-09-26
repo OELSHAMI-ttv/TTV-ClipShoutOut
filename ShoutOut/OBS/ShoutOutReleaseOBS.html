@@ -152,9 +152,24 @@
                         console.log(RaidMin)
                     }
                 }
-                if (command === clipcmd && allowClip === true && globalConfig.oAuth != '<oAuth>')
+                if (flags.broadcaster && command === ClipAllow.toLowerCase() || flags.mod && command === ClipAllow.toLowerCase() )
                 {
-                    makeClip();
+                    if (allowClip === true)
+                    {
+                        allowClip = false;
+                    } else {
+                        allowClip = true;
+                    }
+                }
+                if (command === clipcmd.toLowerCase() && allowClip === true && globalConfig.oAuth != '<oAuth>')
+                {
+                    console.log("extra:" + extra.sinceLastCommand.any )
+                    if (extra.sinceLastCommand.any <= ClipInterval || extra.sinceLastCommand.any == 0)
+                    {
+                        makeClip(user);
+                    } else {
+                        ComfyJS.Say("Sorry you can only clip once every " + ClipInterval +" ms")
+                    }
                 }
                 if (ClipOn === true) 
                 {
@@ -312,19 +327,78 @@
                 }
             }
 
-            function makeClip()
+            async function makeClip(userName)
+            {                
+                password = "Bearer " + globalConfig.oAuth                
+                chanClientId = globalConfig.channelClientID                
+                let validation = await fetch( "https://api.twitch.tv/helix/clips?broadcaster_id="+boardSOID, {
+                    method: 'POST',
+                    headers: {
+                        "client-Id": chanClientId,
+                        "Authorization": password
+                    }}).then( r => r.json() );
+                
+                console.log(validation)
+                let val = validation.data[0].id
+                console.log(val);
+                getClip(val,userName);                
+            }
+
+            function getClip(clipName,userName)
             {
+                setTimeout(() => {
+                var UN = userName;
+                console.log("hello")                
                 var oClip = new XMLHttpRequest();
                 oClip.onreadystatechange = () => {
-                if (oClip.readyState === XMLHttpRequest.DONE) {                    
-                    let q = JSON.parse(oClip.responseText);
-                    console.log(q);                
+                    if (oClip.readyState === XMLHttpRequest.DONE)
+                    {
+                        console.log(oClip)
+                        clipStuff = JSON.parse(oClip.responseText);                                
+                        clipStuff = clipStuff.data[0].url;
+                        console.log(clipStuff);
+                        ComfyJS.Say("Hey look a new clip everyone: " + clipStuff);
+                        sendMessage(clipStuff,UN)
                     }
-                };
-                oClip.open("POST",'https://api.twitch.tv/helix/clips?broadcaster_id='+boardSOID);
-                oClip.setRequestHeader('client-id', clientid);
-                oClip.setRequestHeader('Authorization', 'Bearer '+ clientAuth);
+                }
+                password = "Bearer " + globalConfig.oAuth                
+                chanClientId = globalConfig.channelClientID
+                getURL = "https://api.twitch.tv/helix/clips?id="+clipName
+                console.log(getURL)
+                oClip.open("GET",getURL)
+                oClip.setRequestHeader('client-id', chanClientId)
+                oClip.setRequestHeader('Authorization', password);
                 oClip.send();
+                }, 3000)
+            }
+
+            function sendMessage(clipUrl,UN) {
+                if (discordWebHook != '<Enter WebHook>')
+                    {   
+                        if (avatar_url != '<Enter Avatar URL Img>' )
+                            {
+                                let ava = avatar_url
+                            } else {
+                                let ava = ''
+                            }               
+                        if (contentStr != '<Enter String>')
+                            {
+                                let conStr = UN + " " + contentStr + " ";
+                            }   else {
+                                let conStr = UN + " ";
+                            }  
+                        conStr = conStr + " " + clipUrl
+                        const request = new XMLHttpRequest();                        
+                        request.open("POST", discordWebHook);
+                        request.setRequestHeader('Content-type', 'application/json');
+
+                        const params = {
+                            username: discordBot,
+                            avatar_url: ava,
+                            content: conStr
+                        }
+                    request.send(JSON.stringify(params));
+                    }
             }
 
             function getBroadSOID() {

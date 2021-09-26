@@ -7,7 +7,8 @@ var globalConfig = {
     channelName: '<Channel Name>',
     //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read and if you want Clips clips:edit
     //Generate oAuth from twitchtokengenerator.com
-    oAuth: '<oAuth>' //required only if you want to chat back, otherwise DO NOT TOUCH
+    oAuth: '<oAuth>', //required only if you want to chat back, otherwise DO NOT TOUCH    
+    channelClientID: '<client oAuth ID>' //This is clip client id
 }
 
 //ShoutoutRepeat
@@ -37,8 +38,6 @@ var onClip = 'ClipOn' //Turn on Clips
 var offClip = 'ClipOff' //Turn Shoutout Clips off
 var allOff = 'AllOff' //Turn off Everything
 var allOn = 'AllOn' //Turn on Everything
-var clipcmd  = 'clip' //Make a Clip
-var ClipAllow = 'ChatClip' //Turns Chat clipping on and off
 
 var Everyone = 'oldman'; //Shouts out everyone with a Speak of 1 and drops into Chat a ShoutOut
 var VipsOnly = 'agent47';//Shouts out VIP's (Array you listed at 2) and a Speak of 1
@@ -60,6 +59,16 @@ var recentClips = true //Do we go for recent clips or all.
 var dateRange  = 30 //How many days back to look for clips
 var dateRaidRange = 15 //How Many Days back to look for clips for Raids
 var minClips = 5 //How Many Clips for recent do we need to pull to continue.
+
+
+//Clip & Discord Vars
+var clipcmd  = 'clip' //Make a Clip
+var allowClip = true //Allow Clips
+var ClipAllow = 'ChatClip' //Turns Chat clipping on and off
+var discordWebhook = '<Enter WebHook>'; //Webhook to Discord Channel to Post
+var discordBot = 'Shamis Clip Bot' //Change this to match your discord if you want
+var avatar_url = '<Enter Avatar URL Img>' //This is a public Internet facing Picture file for the Discord Avatar. Optional
+var contentStr = '<Enter String>' //This is anything you want to put in front of the Message for your Clip.
 
 //Shoutout Title above, if you don't want a title set showTitle: false
 var shoutoutConfig = {
