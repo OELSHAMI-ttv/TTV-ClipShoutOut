@@ -18,7 +18,7 @@ var AlwaysRepeatText = "Be Right Back";
 var NoRepeat = 'hype';
 var NoRepeat2 = 'hypes'
 var NoRepeatText = 'HYPE';
-var stop = 'off' //Stop BRB/Hyper.
+var stopBRB = 'resetBRB' //Stop BRB/Hyper.
 var Repeat = 2; //Set to 0 if you want this to autostart without a command.
 
 //Shoutout Cmds
@@ -50,9 +50,9 @@ var RaidMsg = "You Deadset Legend! Thank you @{user} for the RAID!!! Everyone ch
 
 //shoutVars
 var RaidOn = true //Default to Raid Shout outs on!
-var RaidMin = 1 //Min Viewers to Trigger
+var RaidMin = 2 //Min Viewers to Trigger
 var CheerOn = true //Default to Cheer Shouts Outs on!
-var CheerMin = 1 //Min Cheer to Trigger
+var CheerMin = 10 //Min Cheer to Trigger
 var ClipOn = true //Allow Clip Shoutouts
 var allowClip = true //Allow Clips
 var recentClips = true //Do we go for recent clips or all.
