@@ -195,7 +195,7 @@
                             soundFound = true;
                             if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
                             {
-                                let Out = cmdArray[Inx].Say.replace(/@{user}/g,user);
+                                let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
                                 ComfyJS.Say(Out);
                             }
                             //console.log(cmdArray[Inx].file);
