@@ -13,3 +13,5 @@ Alpha code:
 to do the Shoutout back into Chat for you removing the need for a Bot Account like Streamlabs/NightBot etc to do it for you if you wish.
 3. ShoutoutrepeatRelease is for BRB/Hype.
 4. SoundForUsersOBS.htm will play a sound for specific users when lurking or speaking for the first time in Chat, as well as greet them if an oAuth Key is supplied
+
+Please note the v3 Branch is the newest Code being testing and updates and new features are comming in the next few weeks.
