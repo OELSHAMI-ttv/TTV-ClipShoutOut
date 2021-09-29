@@ -68,6 +68,7 @@ var NoRepeat = 'hype';
 var NoRepeat2 = 'hypes'
 var NoRepeatText = 'HYPE';
 var Repeat = 2; //Set to 0 if you want this to autostart without a command.
+var starting = 0; //Set to 1 if you want this to autostart without a command
 
 //Shoutout
 var cmd1 = 'shoutout';
@@ -132,7 +133,7 @@ var clipsArray = [
     var boardstr = globalConfig.channelName;
     var boardID;
     var RanClip = 0;  
-    var Start = 0;
+    var Start = starting;
 
 
     container.style.visibility = 'hidden';
