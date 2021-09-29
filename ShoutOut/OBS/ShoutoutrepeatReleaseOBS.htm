@@ -120,7 +120,11 @@
             soID = soID.data[0].id
             console.log('SOD');
             console.log(soID);
-          }
+            if (Repeat == 0)
+              {
+                barklord();
+              }  
+          }          
         };
         oUser.open("GET","https://api.twitch.tv/helix/users?login="+boardstr);
         oUser.setRequestHeader('client-id', clientid);

@@ -17,8 +17,8 @@ var AlwaysRepeatText = "Be Right Back";
 var NoRepeat = 'hype';
 var NoRepeat2 = 'hypes'
 var NoRepeatText = 'HYPE';
-var Repeat = 2; //Set to 0 if you want this to autostart without a command.
-var starting = 0; //Set to 1 if you want this to autostart without a command
+var Repeat = 2; //Set to 0 if you want this to autostart without a command, otherwise leave at 2
+
 
 //Shoutout
 var cmd1 = 'shoutout';
