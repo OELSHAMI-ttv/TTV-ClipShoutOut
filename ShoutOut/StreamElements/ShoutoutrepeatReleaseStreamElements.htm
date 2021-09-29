@@ -70,7 +70,6 @@ var NoRepeat2 = 'hypes'
 var NoRepeatText = 'HYPE';
 var stop = 'off' //Stop BRB/Hyper.
 var Repeat = 2; //Set to 0 if you want this to autostart without a command.
-var starting = 0; //Set to 1 if you want this to autostart without a command
 
 //Shoutout Cmds
 var cmd1 = 'shoutout';
@@ -164,7 +163,6 @@ var vids = document.getElementById('vids');
     var boardstr = globalConfig.channelName;
     var boardID;
     var RanClip = 0;  
-    var Start = starting;
 
 
     container.style.visibility = 'hidden';
@@ -220,6 +218,11 @@ var vids = document.getElementById('vids');
             soID = soID.data[0].id
             console.log('SOD');
             console.log(soID);
+            if (Repeat == 0)
+              {
+                barklord();
+              }  
+            }
           }
         };
         oUser.open("GET","https://api.twitch.tv/helix/users?login="+boardstr);
@@ -279,7 +282,7 @@ var vids = document.getElementById('vids');
         playVid(clips[RanClip]);
         }
       }  else {
-      if (Repeat == 0 && Start != 0)
+      if (Repeat == 0)
         {
           barklord();
         }  

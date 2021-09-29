@@ -63,9 +63,7 @@
     var soID = 0;
     var boardstr = globalConfig.channelName;
     var boardID;
-    var RanClip = 0;  
-    var Start = starting;
-
+    var RanClip = 0;   
 
     container.style.visibility = 'hidden';
     var oAuth = new XMLHttpRequest();
@@ -120,6 +118,11 @@
             soID = soID.data[0].id
             console.log('SOD');
             console.log(soID);
+            if (Repeat == 0)
+            {
+              barklord();
+            }  
+      }
           }
         };
         oUser.open("GET","https://api.twitch.tv/helix/users?login="+boardstr);
@@ -179,7 +182,7 @@
         playVid(clips[RanClip]);
         }
       }  else {
-      if (Repeat == 0 && Start != 0)
+      if (Repeat == 0)
         {
           barklord();
         }  
