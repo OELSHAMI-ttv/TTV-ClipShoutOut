@@ -20,6 +20,7 @@ var NoRepeat2 = 'hypes'
 var NoRepeatText = 'HYPE';
 var stopBRB = 'resetBRB' //Stop BRB/Hyper.
 var Repeat = 2; //Set to 0 if you want this to autostart without a command.
+var starting = 0; //Set to 1 if you want this to autostart without a command
 
 //Shoutout Cmds
 var cmd1 = 'shoutout';
