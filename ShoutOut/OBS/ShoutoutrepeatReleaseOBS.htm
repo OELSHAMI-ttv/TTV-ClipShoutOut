@@ -103,7 +103,7 @@
           
       }  
       cmd = command.toLowerCase(); 
-      if(cmd === stopBRB && flags.broadcaster || cmd === stopBRB && flags.mod){
+      if(cmd === stopBRB.toLowerCase() && flags.broadcaster || cmd === stopBRB.toLowerCase() && flags.mod){
           location.reload();
       }
     };
