@@ -202,7 +202,8 @@ var vids = document.getElementById('vids');
           barklord();
           
       }  
-      if(command === "resetso" && flags.broadcaster || command === "resetso" && flags.mod){
+      cmd = command.toLowerCase(); 
+      if(cmd === stopBRB.toLowerCase() && flags.broadcaster || cmd === stopBRB.toLowerCase() && flags.mod){
           location.reload();
       }
     };
