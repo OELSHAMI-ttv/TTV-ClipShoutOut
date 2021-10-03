@@ -102,7 +102,8 @@
           barklord();
           
       }  
-      if(command === stopBRB && flags.broadcaster || command === stopBRB && flags.mod){
+      cmd = command.toLowerCase(); 
+      if(cmd === stopBRB.toLowerCase() && flags.broadcaster || cmd === stopBRB.toLowerCase() && flags.mod){
           location.reload();
       }
     };
