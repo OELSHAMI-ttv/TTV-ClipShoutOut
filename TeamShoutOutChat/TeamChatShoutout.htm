@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <!-- <script src="Private.js"></script> -->
+    <script src="teamshoutout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/comfy.js/dist/comfy.min.js"></script>
+    <title></title>
+</head>
+    <body>
+        <script type="text/javascript">
+            var List;
+            var boardCAST = globalConfig.channelName;
+            //Init ComfyJS to your Channels Chat
+            if (globalConfig.oAuth == '<oAuth>')
+                {
+                    ComfyJS.Init( boardCAST );
+                } else {
+                            ComfyJS.Init( boardCAST, "oauth:" + globalConfig.oAuth );
+                            for (let i = 0; i < teamTwitchArr.length; i++ ){
+                                //Push All the Different Teams
+                                console.log(ShoutOutArray)
+                                getTeam(teamTwitchArr[i].Team)
+                            }
+                }
+
+           
+
+            function getTeam(Team)
+            {
+                //Get the Team Memebers
+                var T = Team;
+                var oTeamList = new XMLHttpRequest();
+                oTeamList.onreadystatechange = () => {
+                        if (oTeamList.readyState === XMLHttpRequest.DONE)
+                            {   console.log(oTeamList);
+                                List = JSON.parse(oTeamList.responseText); 
+                                //console.log (List.data.length);                                                           
+                                if (List.data.length >= 1)
+                                {
+                                    List.data.forEach(obj => { 
+                                    T = obj.team_display_name; 
+                                    boardC = globalConfig.channelName.toLowerCase();   
+                                    //console.log(obj.users)       
+                                    obj.users.forEach(u => {
+                                        console.log(u.user_login)   
+                                        var user = {name: '', team:'', Speak: 0};
+                                        user.name = u.user_login.toLowerCase();
+                                        user.team = T;
+                                        //console.log(user)                                        
+                                        if (user.name != boardC){
+                                            ShoutOutArray.push(user) 
+                                        }                                   
+                                        });
+                                    });
+                                }
+                            }
+                        }
+                password = "Bearer " + globalConfig.oAuth;
+                chanClientId = globalConfig.channelClientID;              
+                getURL = "https://api.twitch.tv/helix/teams?name=thegravekeepers";
+                console.log(getURL)
+                oTeamList.open("GET",getURL)
+                oTeamList.setRequestHeader('client-id', chanClientId);
+                oTeamList.setRequestHeader('Authorization', password);
+                oTeamList.send();
+            }
+            
+            ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
+                console.log(command)
+                cmd = command.toLowerCase();
+                if(cmd == cmdReset.toLowerCase() && flags.broadcaster || command == cmdReset.toLowerCase() && flags.mod){
+                    location.reload();
+                }
+                if (flags.broadcaster && cmd === cmdDisable.toLowerCase()|| flags.mod && cmd === cmdDisable.toLowerCase() )
+                {
+                    onBot = 'FALSE';
+                }
+                if (flags.broadcaster && cmd === cmdEnable.toLowerCase()|| flags.mod && cmd === cmdEnable.toLowerCase() )
+                {
+                    onBot = 'TRUE';
+                }
+                if (flags.broadcaster && cmd === cmdLurkOn.toLowerCase()|| flags.mod && cmd === cmdLurkOn.toLowerCase() )
+                {
+                    onLurk = 'TRUE';
+                }
+                if (flags.broadcaster && cmd === cmdLurkOff.toLowerCase()|| flags.mod && cmd === cmdLurkOff.toLowerCase() )
+                {
+                    onLurk = 'FALSE';
+                }
+                if (flags.broadcaster && cmd === cmdChatOn.toLowerCase()|| flags.mod && cmd === cmdChatOn.toLowerCase() )
+                {
+                    onChat = 'TRUE';
+                }
+                if (flags.broadcaster && cmd === cmdChatOff.toLowerCase()|| flags.mod && cmd === cmdChatOff.toLowerCase() )
+                {
+                    onChat = 'FALSE';
+                }
+                if (flags.broadcaster && cmd === cmdCredit.toLowerCase()|| flags.mod && cmd === cmdChatCredit.toLowerCase() )
+                {                    
+                    ComfyJS.Say(creditStr);
+                }
+            }
+
+            ComfyJS.onChat = (user, message, flags, self, extra) => {
+                if (onChat == 'TRUE' && onBot == 'TRUE')
+                {
+                    let Use = user;
+                    Use = Use.toLowerCase();
+                    let Ind = ShoutOutArray.findIndex((obj => obj.name == Use));
+                    if (Ind != -1) {
+                        if (ShoutOutArray[Ind].speak == 0) {                        
+                            console.log(Use + ': ' + ShoutOutArray[Ind].name);
+                            Team = ShoutOutArray[Ind].team;
+                            ShoutOutArray[Ind].speak = 1;
+                            //Call Channel Icon Here
+                            if (globalConfig.oAuth != '<oAuth>')
+                                        {                                        
+                                            let inx = Welcome.findIndex(ok => ok.team == Team )
+                                            var welStrOut;
+                                            if (inx != 1)
+                                            {
+                                                welStrOut = Welcome[inx].welstr.replace(/@{user}/g,user);                                            
+                                            } else {
+                                                welStrOut = defaultShout.replace(/@{user}/g,user);
+                                            }
+                                            welStrOut = welStrout.replace(/@{team}/g,Team);
+                                            ComfyJS.Say(welStrOut);  
+                                        }
+                            
+                        } else {
+                            console.log("Already had your voice.")
+                        }
+                    }
+                }
+            }
+
+            ComfyJS.onJoin = (user, self, extra) => {
+                if (onChat == 'TRUE' && onBot == 'TRUE')
+                {
+                    let Use = user;
+                    Use = Use.toLowerCase();
+                    let Ind = ShoutOutArray.findIndex((obj => obj.name == Use));
+                    if (Ind != -1) {
+                        if (ShoutOutArray[Ind].speak == 0) {                        
+                            console.log(Use + ': ' + ShoutOutArray[Ind].name);
+                            Team = ShoutOutArray[Ind].team;
+                            ShoutOutArray[Ind].speak = 1;
+                            //Call Channel Icon Here
+                            if (globalConfig.oAuth != '<oAuth>')
+                                        {                                        
+                                            let inx = Welcome.findIndex(ok => ok.team == Team )
+                                            var welStrOut;
+                                            if (inx != 1)
+                                            {
+                                                welStrOut = Welcome[inx].welstr.replace(/@{user}/g,user);                                            
+                                            } else {
+                                                welStrOut = defaultShout.replace(/@{user}/g,user);
+                                            }
+                                            welStrOut = welStrout.replace(/@{team}/g,Team);
+                                            ComfyJS.Say(welStrOut);  
+                                        }
+                            
+                        } else {
+                            console.log("Already had your voice.")
+                        }
+                    }
+                }
+            }
+
+        </script>
+    </body >
+</html >
