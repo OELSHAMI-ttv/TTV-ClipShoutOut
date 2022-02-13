@@ -10,20 +10,19 @@ var globalConfig = {
 //Thank you DeviantDreamers for a wonderful way to great someone via Timezone. Love it!
 var Welcome =  [
  { welstr: "Welcome in my good friend @{user}, it is wonderful that you stopped in. Hope your having an Awesome Timezone @{user}", team: '<Team Name>'}
-,{ welstr: "Welcome in my good friend @{user}, it is wonderful that you stopped in. Checkout this amazing member of the @{team} @ https://twitch.tv/@{user}", team: 'The Kitty Cast'}
-,{ welstr: "Welcome in my good friend @{user}, it is wonderful that you stopped in. Checkout a great memember of the @{team} at https://twitch.tv/@{user}", team: 'The Grave Keepers'}
+,{ welstr: "Welcome in my good friend @{user}, it is wonderful that you stopped in. Checkout this amazing member of the @{team} @ https://twitch.tv/@{user}", team: '<Team Display Name>'}
+,{ welstr: "Welcome in my good friend @{user}, it is wonderful that you stopped in. Checkout a great member of the @{team} at https://twitch.tv/@{user}", team: '<Team Display Name>'}
 ];
 
 var teamTwitchArr = [
-    { team: 'thegravekeepers'}
+    { team: '<Twitch Team Name>'}
 ];
 
 defaultShout = "Welcome in my good friend @{user}, it is wonderful that you stopped in. Checko them out at https://twitch.tv/@{user}"
 
 var ShoutOutArray = [
      { name: '<user name>', team: '<team name>', speak: 0}     
-    ,{ name: '<user name>', team: '<team name>', speak: 0}
-    ,{ name: 'valgal248', team: 'The Kitty Cast', speak: 0}
+    ,{ name: '<user name>', team: '<team name>', speak: 0}   
 ]
 
 //Configurations
