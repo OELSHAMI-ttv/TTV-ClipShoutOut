@@ -42,4 +42,4 @@ cmdChatOn = 'tbCon';
 cmdChatOff = 'tbCOff';
 //Shoutout Link to GitHub Where Code is Hosted/Credit Shami
 cmdCredit = 'tbShami'
-creditStr = 'If you would like the code to the Team ShoutOut Bot, check out @OELSHAMI Github page for the files that you can freely use, https://github.com/OELSHAMI-ttv/TTV-ClipShoutOut';
+creditStr = 'If you would like the code to the Team ShoutOut Bot, check out @OELSHAMI Github page for the files that you can freely use, https://github.com/OELSHAMI-ttv/TTV-ClipShoutOut/tree/V3/TeamShoutOutChat';
