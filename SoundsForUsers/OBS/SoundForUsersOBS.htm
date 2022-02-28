@@ -273,7 +273,10 @@
             console.log(user);
             //RanClip = Math.floor(Math.random() * clips.length);
             let selHost = Math.floor(Math.random() * cmdHost.length);
-            mp3.push(cmdHost[selHost].file)
+            if (cmdHost[selHost].file != '<SoundFileName>') 
+            {    
+                mp3.push(cmdHost[selHost].file)
+            }
             if (globalConfig.oAuth != '<oAuth>')
                                 {
                                     var Out = strHost.replace(/@{user}/g,user);
