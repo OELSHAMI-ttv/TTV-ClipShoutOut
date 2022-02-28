@@ -269,6 +269,18 @@
             }
         }
 
+        ComfyJS.onHosted = (user, viewers, autohost, extra) => {
+            console.log(user);
+            //RanClip = Math.floor(Math.random() * clips.length);
+            let selHost = Math.floor(Math.random() * cmdHost.length);
+            mp3.push(cmdHost[selHost].file)
+            if (globalConfig.oAuth != '<oAuth>')
+                                {
+                                    var Out = strHost.replace(/@{user}/g,user);
+                                    ComfyJS.Say(Out);
+                                }
+        }
+
         function playSound(clip) {
             isSoundPlaying = true;
             var sound = new Howl({
