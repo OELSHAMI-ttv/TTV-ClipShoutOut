@@ -573,7 +573,8 @@
                 streamer.innerHTML = ' ' + names[0];
                 console.log("Playing Clip")  
                 video.setAttribute('src', url);
-                video.muted = false;        
+                video.muted = false;  
+                video.load();      
                 video.play();
             }
     
@@ -615,7 +616,7 @@
                 if(video.currentTime >= 90){
                     removeVid();
                 }
-            }, 800);    
+            }, 1000);    
         </script>
     </body>
 </html>

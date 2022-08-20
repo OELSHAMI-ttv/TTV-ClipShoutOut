@@ -103,7 +103,7 @@
           
       }  
       cmd = command.toLowerCase(); 
-      if(cmd == stopBRB && flags.broadcaster || cmd == stopBRB && flags.mod){
+      if(cmd == stopBRB.toLowerCase() && flags.broadcaster || cmd == stopBRB.toLowerCase() && flags.mod){
           location.reload();
       }
     };
@@ -166,7 +166,8 @@
             SODivs.style.visibility = 'visible';            
             console.log("Playing Clip")
         vids.setAttribute('src', url);
-	      vids.muted = false;        
+	      vids.muted = false; 
+        vids.load();       
         vids.play();
       }    
       vids.onended = function() {
@@ -193,7 +194,7 @@
 		    vids.muted = true;
         vids.currentTime = 0;
 		    vids.src = "";        
-        SODivs.style.visibility = 'hidden';        
+        //SODivs.style.visibility = 'hidden';        
         console.log(RanClip);
         var kill = RanClip;
         console.log(kill)
