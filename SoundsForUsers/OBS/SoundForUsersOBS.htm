@@ -28,7 +28,10 @@
             let Ind = clipsArray.findIndex((obj => obj.name == user));
             if (Ind != -1) {
                 if (clipsArray[Ind].run == 0) {
-                    mp3.push(clipsArray[Ind].file);
+                    If (clipsArray[Ind].file != '<SoundFileName>')
+                        {
+                            mp3.push(clipsArray[Ind].file);
+                        }
                     console.log(clipsArray[Ind].file);
                     clipsArray[Ind].run = 1;
                     //Add Channel Icon Code here
@@ -105,7 +108,10 @@
                 if (Ind != -1) {
                     console.log(clipsArray[Ind].run);
                     if (clipsArray[Ind].run <= MaxMe) {
-                        mp3.push(clipsArray[Ind].file);
+                        if (clipsArray[Ind].file != '<SoundFileName>')
+                            {
+                                mp3.push(clipsArray[Ind].file);
+                            }
                         console.log(clipsArray[Ind].file);
                         clipsArray[Ind].run += 1;
                     } else {
@@ -159,7 +165,10 @@
                     if( extra.sinceLastCommand.user >= CoolUserDown || extra.sinceLastCommand.user === 0 )
                     {
                         console.log(cmdLMTArray[Inx].file)
-                        mp3.push(cmdLMTArray[Inx].file);
+                        if (cmdLMTArray[Inx].file != '<SoundFileName>')
+                            {
+                                mp3.push(cmdLMTArray[Inx].file);
+                            }
                         soundFound = true;
                         if (globalConfig.oAuth != '<oAuth>' && cmdLMTArray[Inx].say != '<Thing to Say Here>')
                             {
@@ -179,7 +188,10 @@
                     if (cmdArray[Inx].flag.match('broadcaster') && flags.broadcaster)
                     {
                         console.log("hey");
-                        mp3.push(cmdArray[Inx].file);
+                        if (cmdArray[Inx].file != '<SoundFileName>')
+                            {
+                                mp3.push(cmdArray[Inx].file);
+                            }
                         soundFound = true;
                         if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
                             {
@@ -191,7 +203,10 @@
                     {
                         if( extra.sinceLastCommand.user >= CoolModDown || extra.sinceLastCommand.user == 0 )
                         {
-                            mp3.push(cmdArray[Inx].file);
+                                if (cmdArray[Inx].file != '<SoundFileName>')
+                                    {
+                                        mp3.push(cmdArray[Inx].file);
+                                    }
                             soundFound = true;
                             if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
                             {
@@ -203,7 +218,10 @@
                     } else if (cmdArray[Inx].flag.match('vip') && flags.vip)
                     {
                         if( extra.sinceLastCommand.user >= CoolVIPDown || extra.sinceLastCommand.user == 0 ) {
-                            mp3.push(cmdArray[Inx].file);
+                            if (cmdArray[Inx].file != '<SoundFileName>')
+                             {
+                                 mp3.push(cmdArray[Inx].file);
+                             }
                             soundFound = true;
                             //console.log(cmdArray[Inx].file);
                             if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
@@ -215,7 +233,10 @@
                     } else if (cmdArray[Inx].flag.match('sub') && flags.subscriber)
                     {
                         if( extra.sinceLastCommand.user >= CoolSubDown || extra.sinceLastCommand.user == 0 ) {
-                            mp3.push(cmdArray[Inx].file);
+                            if (cmdArray[Inx].file != '<SoundFileName>')
+                             {
+                                 mp3.push(cmdArray[Inx].file);
+                             }
                             soundFound = true;
                             //console.log(cmdArray[Inx].file);
                             if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
@@ -233,7 +254,10 @@
                         console.log(extra.sinceLastCommand.any)
                         if( extra.sinceLastCommand.any >= CoolDown || extra.sinceLastCommand.user == 0 )
                             {
-                                mp3.push(cmdArray[Inx].file)
+                                if (cmdArray[Inx].file != '<SoundFileName>')
+                                    {
+                                        mp3.push(cmdArray[Inx].file)
+                                    }
                                 if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
                                     {
                                         let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
@@ -253,7 +277,10 @@
             let Ind = clipsArray.findIndex((obj => obj.name == Use));
             if (Ind != -1) {
                 if (clipsArray[Ind].run == 0) {
-                    mp3.push(clipsArray[Ind].file);
+                    if (clipsArray[Ind].file != '<SoundFileName>')
+                        {
+                            mp3.push(clipsArray[Ind].file);
+                        }
                     console.log(Use + ': ' + clipsArray[Ind].file);
                     clipsArray[Ind].run = 1;
                     //Call Channel Icon Here
