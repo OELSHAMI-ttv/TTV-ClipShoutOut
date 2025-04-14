@@ -12,7 +12,7 @@
     <script type="text/javascript">
 
         var mp3 = [];
-        var isVideoPlaying = false;
+        var isSoundPlaying = false;
 
         //Init ComfyJS to your Channels Chat
         if (globalConfig.oAuth == '<oAuth>')
@@ -28,9 +28,13 @@
             let Ind = clipsArray.findIndex((obj => obj.name == user));
             if (Ind != -1) {
                 if (clipsArray[Ind].run == 0) {
-                    mp3.push(clipsArray[Ind].file);
+                    If (clipsArray[Ind].file != '<SoundFileName>')
+                        {
+                            mp3.push(clipsArray[Ind].file);
+                        }
                     console.log(clipsArray[Ind].file);
                     clipsArray[Ind].run = 1;
+                    //Add Channel Icon Code here
                     if (globalConfig.oAuth != '<oAuth>')
                                 {
                                     var Out = Welcome.replace(/@{user}/g,user);
@@ -39,26 +43,63 @@
                 }
             } else {
                 if (Generic == 0) {
-                    mp3.push(GenSnd);
+                    if (GenSndOn == true)
+                    {
+                        mp3.push(GenSnd);
+                    }
                 }
                 Generic = Generic + 1;
                 //console.log(user);
-                clipsArray.push({ name: user, file: GenSnd , run: 1 });
+                if (GenSndOn == true)
+                {
+                    clipsArray.push({ name: user, file: GenSnd , run: 1 });
+                }                
                 if (Generic == GenericConst) {
                     Generic = 0;
                 }
             }
         } 
 
+        ComfyJS.onReward = ( user, reward, cost, message, extra ) => {            
+            //console.log( user + " redeemed " + reward + " message: " + message)             
+            var ward = reward;
+            ward.toLowerCase();  
+            let Ind = cmdRewardArray.findIndex((obj => obj.reward == ward));
+                console.log(user + ':' + reward);
+                if (Ind != -1) {   
+                    var smsg;    
+                    cmdOut = cmdRewardArray[Ind].command  
+                    fileOut = cmdRewardArray[Ind].file
+                    if (cmdRewardArray[Ind].cmdsay != '<Thing to Say Here>') 
+                        {
+                            smsg = cmdRewardArray[Ind].cmdsay.replace(/@{user}/g,user);
+                            smsg = smsg.replace(/@{msg}/g,message);
+                            console.log(smsg)
+                        }   
+                        else 
+                        {
+                            smsg = '<Thing to Say Here>';
+                        }                 
+                    cmdUserArray.push({command: cmdOut, file: fileOut, tuser: user, say: smsg})
+                    //<Thing to Say Here>                        
+                    if (globalConfig.oAuth != '<oAuth>' && cmdRewardArray[Ind].say != '<Thing to Say Here>')
+                            {
+                                var Out = cmdRewardArray[Ind].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
+            }
+        }
+
         ComfyJS.onCommand = (user, command, message, flags, extra) => {
-            console.log(command)
+            console.log(command)                        
             if (flags.broadcaster && command == 'wakeup' || flags.mod && command == 'wakeup') {
                 Silence = 0;
                 console.log('WAKE UP')
             }
             console.log(command);
-
+            let soundFound = false;
             if (command == cmdMe) {
+                soundFound = true;
                 let Use = user;
                 Use = Use.toLowerCase();
                 console.log(Use);
@@ -67,7 +108,10 @@
                 if (Ind != -1) {
                     console.log(clipsArray[Ind].run);
                     if (clipsArray[Ind].run <= MaxMe) {
-                        mp3.push(clipsArray[Ind].file);
+                        if (clipsArray[Ind].file != '<SoundFileName>')
+                            {
+                                mp3.push(clipsArray[Ind].file);
+                            }
                         console.log(clipsArray[Ind].file);
                         clipsArray[Ind].run += 1;
                     } else {
@@ -80,17 +124,149 @@
                     }
                 }
             }
-            if (flags.broadcaster && command == 'silence' || flags.mod && command == 'silence') {
-                location.reload();
+            if (flags.broadcaster && command == silent || flags.mod && command == silent) {
+                location.reload();                
             }
-            if (flags.broadcaster && command == 'quiet' || flags.mod && command == 'quiet') {
+            if (flags.broadcaster && command == quiet || flags.mod && command == quiet) {
                 Silence = 1;
+                soundFound = true;
             }
-            if (flags.broadcaster && command == 'wakeup' || flags.mod && command == 'wakeup') {
+            if (flags.broadcaster && command == wakeup || flags.mod && command == wakeup) {
                 Silence = 0;
+                soundFound = true;
                 //ComfyJS.Say("Wake THE FUCK Up Samurai!");
             }
-
+            
+            let cmdFound = false
+           
+            if (soundFound == false)
+            {
+                //Add a walk the array function to find if both Command and User are present
+                //let Ix = cmdArray.findIndex((obj => obj.command == command));
+                cmdRMTArray = [...cmdUserArray]//cmdUserArray
+                var i = cmdRMTArray.findIndex(obj=>obj.command === command)
+                cmdLMTArray = [];
+                while (i !== -1) {
+                    console.log(i)
+                    cmdLMTArray.push(cmdRMTArray[i]);
+                    cmdRMTArray.splice(i, 1);
+                    console.log(cmdRMTArray)
+                    i = cmdRMTArray.findIndex(obj=>obj.command === command)
+                }   
+                console.log(cmdLMTArray)             
+                //let Use = user;
+                //Use = Use.toLowerCase();
+                console.log(user)
+                let Inx = cmdLMTArray.findIndex((obj => obj.tuser === user.toLowerCase()));
+                console.log(Inx)
+                if (Inx !== -1)
+                {   
+                    console.log('Time:' + extra.sinceLastCommand.user)
+                    if( extra.sinceLastCommand.user >= CoolUserDown || extra.sinceLastCommand.user === 0 )
+                    {
+                        console.log(cmdLMTArray[Inx].file)
+                        if (cmdLMTArray[Inx].file != '<SoundFileName>')
+                            {
+                                mp3.push(cmdLMTArray[Inx].file);
+                            }
+                        soundFound = true;
+                        if (globalConfig.oAuth != '<oAuth>' && cmdLMTArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdLMTArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                                console.log(Out);
+                            }
+                    }
+                }
+            }
+            if (soundFound == false)
+            {
+                let Inx = cmdArray.findIndex((obj => obj.command == command));
+                if (Inx !== -1)
+                {
+                    cmdFound = true;
+                    if (cmdArray[Inx].flag.match('broadcaster') && flags.broadcaster)
+                    {
+                        console.log("hey");
+                        if (cmdArray[Inx].file != '<SoundFileName>')
+                            {
+                                mp3.push(cmdArray[Inx].file);
+                            }
+                        soundFound = true;
+                        if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
+                        //console.log(cmdArray[Inx].file);
+                    } else if (cmdArray[Inx].flag.match('mod') && flags.mod)
+                    {
+                        if( extra.sinceLastCommand.user >= CoolModDown || extra.sinceLastCommand.user == 0 )
+                        {
+                                if (cmdArray[Inx].file != '<SoundFileName>')
+                                    {
+                                        mp3.push(cmdArray[Inx].file);
+                                    }
+                            soundFound = true;
+                            if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
+                            //console.log(cmdArray[Inx].file);
+                        }
+                    } else if (cmdArray[Inx].flag.match('vip') && flags.vip)
+                    {
+                        if( extra.sinceLastCommand.user >= CoolVIPDown || extra.sinceLastCommand.user == 0 ) {
+                            if (cmdArray[Inx].file != '<SoundFileName>')
+                             {
+                                 mp3.push(cmdArray[Inx].file);
+                             }
+                            soundFound = true;
+                            //console.log(cmdArray[Inx].file);
+                            if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
+                        }
+                    } else if (cmdArray[Inx].flag.match('sub') && flags.subscriber)
+                    {
+                        if( extra.sinceLastCommand.user >= CoolSubDown || extra.sinceLastCommand.user == 0 ) {
+                            if (cmdArray[Inx].file != '<SoundFileName>')
+                             {
+                                 mp3.push(cmdArray[Inx].file);
+                             }
+                            soundFound = true;
+                            //console.log(cmdArray[Inx].file);
+                            if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                            {
+                                let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                ComfyJS.Say(Out);
+                            }
+                        }
+                    }
+                    else if (cmdArray[Inx].flag.match('all'))
+                    {
+                        //Cooldown
+                        console.log('all')
+                        soundFound = true;
+                        console.log(extra.sinceLastCommand.any)
+                        if( extra.sinceLastCommand.any >= CoolDown || extra.sinceLastCommand.user == 0 )
+                            {
+                                if (cmdArray[Inx].file != '<SoundFileName>')
+                                    {
+                                        mp3.push(cmdArray[Inx].file)
+                                    }
+                                if (globalConfig.oAuth != '<oAuth>' && cmdArray[Inx].say != '<Thing to Say Here>')
+                                    {
+                                        let Out = cmdArray[Inx].say.replace(/@{user}/g,user);
+                                        ComfyJS.Say(Out);
+                                    }                            
+                            }
+                    }                                
+                }   
+            } 
         }
 
         ComfyJS.onChat = (user, message, flags, self, extra) => {
@@ -101,9 +277,13 @@
             let Ind = clipsArray.findIndex((obj => obj.name == Use));
             if (Ind != -1) {
                 if (clipsArray[Ind].run == 0) {
-                    mp3.push(clipsArray[Ind].file);
+                    if (clipsArray[Ind].file != '<SoundFileName>')
+                        {
+                            mp3.push(clipsArray[Ind].file);
+                        }
                     console.log(Use + ': ' + clipsArray[Ind].file);
                     clipsArray[Ind].run = 1;
+                    //Call Channel Icon Here
                     if (globalConfig.oAuth != '<oAuth>')
                                 {
                                     var Out = Welcome.replace(/@{user}/g,user);
@@ -117,7 +297,7 @@
         }
 
         function playSound(clip) {
-            isVideoPlaying = true;
+            isSoundPlaying = true;
             var sound = new Howl({
                 src: [clip]
             });
@@ -125,14 +305,14 @@
             //console.log('Playing');
             //console.log('clip: ' + clip); 
             sound.on('end', function () {
-                removeVid();
+                removeSound();
             });
         };
 
         setInterval(function () {
             if (mp3.length > 0 && Silence == 0) {
-                console.log(isVideoPlaying);
-                if (!isVideoPlaying) {
+                console.log(isSoundPlaying);
+                if (!isSoundPlaying) {
                     // console.log(mp3[0]);
                     playSound(mp3[0]);
                 }
@@ -154,8 +334,8 @@
             }
         }, 1000);
 
-        function removeVid() {
-            isVideoPlaying = false;
+        function removeSound() {
+            isSoundPlaying = false;
             //  commandType = commandType.slice(1);
             mp3 = mp3.slice(1);
             console.log("Clip Ended!");
