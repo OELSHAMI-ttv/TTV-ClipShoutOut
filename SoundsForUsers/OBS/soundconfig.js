@@ -59,3 +59,9 @@ var cmdRewardArray = [
     { command: '<enter command>', file: '<SoundFileName>',  reward: '<enter reward name>', say: "<Thing to Say Here>", cmdsay: "<Thing to Say Here>"}
    ,{ command: '<enter command>', file: '<SoundFileName>',  reward: '<enter reward name>', say: "<Thing to Say Here>", cmdsay: "<Thing to Say Here>"}
 ];
+var cmdHost = [
+    { file: '<SoundFileName>' },
+    { file: '<SoundFileName>' },
+]
+
+strHost = 'Thank you @@{user} for hosting your Deadset Legend!'
