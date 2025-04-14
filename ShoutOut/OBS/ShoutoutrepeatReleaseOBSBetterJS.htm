@@ -3,9 +3,10 @@
     <script src="shoutoutconfig.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/comfy.js/dist/comfy.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   </head>
   <style>
-    body {
+    body { 
       margin:0px;
     }
     #SODivs {
@@ -18,6 +19,8 @@
       z-index: 10;
       text-align: center;
       width:100%;
+      /* animation: bounce; /* referring directly to the animation's @keyframe declaration */
+      /* animation-duration: 2s; /* don't forget to set a duration! */
       -webkit-text-stroke: 1px black;
         color: white;
         text-shadow:
@@ -26,7 +29,7 @@
         1px -1px 0 #000,
         -1px 1px 0 #000,
         1px 1px 0 #000;
-        
+              
     }
     #vids {
       visibility: hidden;
@@ -40,114 +43,15 @@
 	}
   </style>
   <body>
-    <div id="SODivs">Be Right Back!</div>
+    <div id="SODivs" class="animate__animated animate__bounce">Be Right Back!</div>
     <div id="player">
     <video id="vids" style="background-color: rgba(42, 179, 94, 0);" width="100%" height="100%" autoplay >
       <source src="" type="video/mp4">
       Your browser does not support the vids tag.
     </video>
     <script type="text/javascript">
-
-    // JavaScript source code
-// JavaScript source code
-// Global Config for channel setup
-
-var globalConfig = {
-    clientid: '<clientID>',
-    clientSec: '<clientSec>',
-    channelName: '<Channel Name>',
-    //oAuth Requires these scopes: channel:read:redemptions user:read:email chat:edit chat:read
-    //Generate oAuth from twitchtokengenerator.com
-    oAuth: '<oAuth>' //required only if you want to chat back, otherwise DO NOT TOUCH
-}
-
-//ShoutoutRepeat
-var AlwaysRepeat = 'brb';
-var AlwaysRepeat2 = 'beback';
-var AlwaysRepeatText = "Be Right Back";
-var NoRepeat = 'hype';
-var NoRepeat2 = 'hypes'
-var NoRepeatText = 'HYPE';
-var stop = 'off' //Stop BRB/Hyper.
-var Repeat = 2; //Set to 0 if you want this to autostart without a command.
-
-//Shoutout Cmds
-var cmd1 = 'shoutout';
-var cmd2 = 'so';
-var cmd3 = 'SuperEvilMonkey420'
-var cmd4 = 'SEM420'
-var resetso = 'resetso'
-var onRaid = 'RaidOn' //Auto Shoutout on Raids On!
-var minRaid = 'RaidMin' //Change the Min to AutoShout On Raids live
-var minCheer = 'CheerMin' //Change the Min to Auto shoutout on Cheer Live
-var onCheer = 'CheerOn' //Auto Shoutout on Cheer
-var ShoutOutDelayBits = 8000; //Shoutout Delay for Auto Cheer, in ms
-var offRaid = 'RaidOff' //Turn AutoShout On Raid Off
-var offCheer = 'CheerOff' //Turn Auto Shout On on Cheer Off
-var onClip = 'ClipOn' //Turn on Clips
-var offClip = 'ClipOff' //Turn Shoutout Clips off
-var allOff = 'AllOff' //Turn off Everything
-var allOn = 'AllOn' //Turn on Everything
-
-var Everyone = 'oldman'; //Shouts out everyone with a Speak of 1 and drops into Chat a ShoutOut
-var VipsOnly = 'agent47';//Shouts out VIP's (Array you listed at 2) and a Speak of 1
-var SilentEVERYONE = 'leon';//Shouts out everyone with a Speak of 1, no Chat Spam
-var SilentVips = 'saso';//Shouts out VIP's (Array you listed at 2) and a Speak of 1, no Chat Spam
-//Shout User for String is @{user}
-//Last Game They played is @{lastGame}
-var ShoutOut =  'Go get to know @@{user} who was last seen playing @{lastGame}. You can give them a follow at https://twitch.tv/@{user}';
-var RaidMsg = "You Deadset Legend! Thank you @{user} for the RAID!!! Everyone check out our Bark Lord Certified Friend @ https://www.twitch.tv/@{user} who was playing @{lastGame}";
-
-//shoutVars
-var RaidOn = true //Default to Raid Shout outs on!
-var RaidMin = 1 //Min Viewers to Trigger
-var CheerOn = true //Default to Cheer Shouts Outs on!
-var CheerMin = 1 //Min Cheer to Trigger
-var ClipOn = true //Allow Clip Shoutouts
-var recentClips = true //Do we go for recent clips or all.
-var dateRange  = 30 //How many days back to look for clips
-var dateRaidRange = 15 //How Many Days back to look for clips for Raids
-var minClips = 5 //How Many Clips for recent do we need to pull to continue.
-
-//Shoutout Title above, if you don't want a title set showTitle: false
-var shoutoutConfig = {
-    showTitle: true,
-    title: '<Shoutout Title Text>'
-}
-
-//Gen 4 streamer/bots
-//Gen 2 VIP
-//Speak 2 - DO NOT SHOUTOUT
-//Speak 1 - Always Shoutout
-//Speak 0 - Only Shoutout when chat/lurking on Channel
-
-var clipsArray = [
-    { name: '<channel name>', gen: 4, speak: 2  }
-    //VIP's 
-    //,{name: <channelName>. gen: 2, speak: 0 } 
-    ,{ name: '<VIP>', gen: 2, speak: 0 }
-    ,{ name: '<VIP2>', gen: 2, speak: 0 }
-    //Regulars
-    //,{name: <channelName>. gen: 1, speak: 0 } 
-    ,{ name: '<regular>', gen: 1, speak: 0 }
-    //Well known Bots
-    ,{ name: 'streamelements', gen:4, speak: 2}
-    ,{ name: 'streamlabs', gen:4, speak: 2}
-    ,{ name: 'nightbot', gen:4, speak: 2}
-    ,{ name: 'moobot', gen:4, speak: 2}
-    ,{ name: 'wisebot', gen:4, speak: 2}
-    ,{ name: 'rainmaker', gen:4, speak: 2}
-    ,{ name: 'SoundAlerts', gen:4, speak: 2}
-    ,{ name: 'fossabot', gen:4, speak: 2}
-];
-
-//cheer Bits To Limit Auto shoutout
-var cmdBits = [
-    { name: '<channel Name>', bitties: 0}
-  ]
-// Go get to know @" + element.name + ". You can give them a follow at https://twitch.tv/" + element.name  
-//regular code here
-var vids = document.getElementById('vids');
+    
+    var vids = document.getElementById('vids');
     var container = document.getElementById('vids');
     var SODivs = document.getElementById('SODivs');    
     var streamer = document.getElementById('streamer');
@@ -162,8 +66,7 @@ var vids = document.getElementById('vids');
     var soID = 0;
     var boardstr = globalConfig.channelName;
     var boardID;
-    var RanClip = 0;  
-
+    var RanClip = 0;   
 
     container.style.visibility = 'hidden';
     var oAuth = new XMLHttpRequest();
@@ -203,7 +106,7 @@ var vids = document.getElementById('vids');
           
       }  
       cmd = command.toLowerCase(); 
-      if(cmd === stopBRB.toLowerCase() && flags.broadcaster || cmd === stopBRB.toLowerCase() && flags.mod){
+      if(cmd == stopBRB && flags.broadcaster || cmd == stopBRB && flags.mod){
           location.reload();
       }
     };
@@ -220,11 +123,10 @@ var vids = document.getElementById('vids');
             console.log('SOD');
             console.log(soID);
             if (Repeat == 0)
-              {
-                SODivs.innerHTML = AlwaysRepeatText;
-                barklord();
-              }  
-           }          
+            {
+              barklord();
+            }        
+          }
         };
         oUser.open("GET","https://api.twitch.tv/helix/users?login="+boardstr);
         oUser.setRequestHeader('client-id', clientid);
@@ -267,7 +169,8 @@ var vids = document.getElementById('vids');
             SODivs.style.visibility = 'visible';            
             console.log("Playing Clip")
         vids.setAttribute('src', url);
-	      vids.muted = false;        
+	      vids.muted = false; 
+        vids.load();       
         vids.play();
       }    
       vids.onended = function() {
@@ -294,7 +197,7 @@ var vids = document.getElementById('vids');
 		    vids.muted = true;
         vids.currentTime = 0;
 		    vids.src = "";        
-        SODivs.style.visibility = 'hidden';        
+        //SODivs.style.visibility = 'hidden';        
         console.log(RanClip);
         var kill = RanClip;
         console.log(kill)
