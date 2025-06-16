@@ -59,7 +59,7 @@
     var clientSec = globalConfig.clientSec;
     var ClientAuthURL;
     var clientAuth;
-    var soChannel;
+    var soChannel = globalConfig.channelName;
     var soID = 0;
     var boardstr = globalConfig.channelName;
     var boardID;
@@ -275,6 +275,17 @@
             oUser.send();
             console.log(oUser);
         };
+      
+       function barkLord(){
+                if (recentClips == true)
+                {
+                    LordOfTheSith(soChannel, dateRange);
+                } else {
+                    bl(soChannel);
+                }
+
+            }
+
 
   function playVid(url) {
         isVidActive = true;        
