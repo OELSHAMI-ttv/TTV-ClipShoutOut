@@ -64,6 +64,7 @@
     var boardstr = globalConfig.channelName;
     var boardID;
     var RanClip = 0;   
+    var useAllClips = 0; //set to 1 if you want your most recent clips.
 
     container.style.visibility = 'hidden';
     var oAuth = new XMLHttpRequest();
@@ -277,7 +278,7 @@
         };
       
        function barklord(){
-                if (recentClips == true)
+                if (recentClips == true && useAllClips == 1)
                 {
                     LordOfTheSith(soChannel, dateRange);
                 } else {
